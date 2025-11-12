@@ -1,4 +1,5 @@
 import Loader from "./components/Loader.jsx";
+import Navbar from "./components/Navbar";
 import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import gsap from 'gsap';
@@ -88,42 +89,8 @@ if (isLoading) return <Loader onComplete={() => setIsLoading(false)} />;
       
 
       {/* Navbar */}
-      <nav className="fixed top-0 w-full z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center py-3 px-4">
-        <div className="w-full max-w-6xl flex items-center justify-between">
-          <div className="text-white font-semibold">SAHIL HIRVE</div>
+      <Navbar scrollToSection={scrollToSection} />
 
-          <div className="hidden md:block">
-            <ul className="flex gap-6 text-gray-300">
-              {['Home', 'Education', 'Projects', 'Achievements', 'Skills', 'About', 'Contact'].map((item) => (
-                <li key={item}>
-                  <button
-                    onClick={(e) => { e.preventDefault(); scrollToSection(item.toLowerCase()); }}
-                    className="hover:text-orange-400 transition px-2 py-1 text-sm text-gray-300"
-                    aria-label={`Go to ${item}`}
-                  >
-                    {item}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Mobile simple links */}
-          <div className="md:hidden">
-            <select
-              onChange={(e) => { const val = e.target.value; if (val) scrollToSection(val); }}
-              className="bg-black text-gray-300 border border-gray-700 p-2 rounded"
-              aria-label="Navigate sections"
-              defaultValue=""
-            >
-              <option value="" disabled>Navigate</option>
-              {['home','education','projects','achievements','skills','about','contact'].map(s => (
-                <option key={s} value={s}>{s.charAt(0).toUpperCase() + s.slice(1)}</option>
-              ))}
-            </select>
-          </div>
-        </div>
-      </nav>
 
       {/* Hero Section */}
       <section id="home" ref={addToRefs} className="h-screen flex flex-col justify-center items-center bg-[url('/assets/images/test1.jpg')] bg-cover bg-center relative">
