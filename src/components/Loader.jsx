@@ -1,8 +1,8 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import gsap from "gsap";
 
-export default function Loader({ onComplete }) {
+function Loader({ onComplete }) {
   const waveRef = useRef(null);
 
   useEffect(() => {
@@ -76,5 +76,38 @@ export default function Loader({ onComplete }) {
         </motion.div>
       </div>
     </div>
+  );
+}
+
+export default function App() {
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    if (!isLoading) {
+      document.body.style.overflow = "auto";
+    } else {
+      document.body.style.overflow = "hidden";
+    }
+  }, [isLoading]);
+
+  return (
+    <>
+      {isLoading ? (
+        <Loader onComplete={() => setIsLoading(false)} />
+      ) : (
+        <div className="main-content bg-black text-gray-200 min-h-screen flex flex-col items-center justify-center text-center">
+          <h1 className="text-5xl font-bold text-orange-500 mb-4 animate-fade-in">Welcome to Sahil's Portfolio</h1>
+          <p className="text-lg text-gray-400 animate-fade-in delay-200">
+            Explore my projects, skills, and achievements below.
+          </p>
+          <button
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            className="mt-6 px-6 py-3 bg-orange-600 hover:bg-orange-500 text-white font-semibold rounded-lg shadow-md transition"
+          >
+            Explore Now
+          </button>
+        </div>
+      )}
+    </>
   );
 }
