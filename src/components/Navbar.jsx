@@ -1,11 +1,14 @@
-import React, { useEffect } from "react";
-import { motion } from "framer-motion";
+import React, { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
 export default function Navbar({ scrollToSection }) {
+const [active, setActive] = useState("Home");
+const [hoverPos, setHoverPos] = useState({ x: 0, y: 0 });
+
   useEffect(() => {
     // Animate Hero title (center) → Navbar position
     gsap.fromTo(
@@ -41,75 +44,113 @@ export default function Navbar({ scrollToSection }) {
   }, []);
 
   return (
-    <nav className="fixed top-0 w-full z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center py-3 px-4">
-      <div className="w-full max-w-6xl flex items-center justify-between">
-        <motion.div
-          id="navbar-title"
-          className="text-orange-500 font-semibold text-lg md:text-xl"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 0 }}
-        >
-          SAHIL HIRVE
-        </motion.div>
+    <nav
+  className="fixed top-0 w-full z-50 backdrop-blur-xl bg-white/10 border-b border-white/20
+             shadow-[inset_0_0_0.5px_rgba(255,255,255,0.4)] overflow-hidden"
+  onMouseMove={(e) => setHoverPos({ x: e.clientX, y: e.clientY })}
+>
+  {/* Glow effect following cursor */}
+  <motion.div
+    className="pointer-events-none fixed inset-0 z-0"
+    style={{
+      background: `radial-gradient(600px at ${hoverPos.x}px ${hoverPos.y}px, rgba(255,255,255,0.12), transparent 80%)`,
+    }}
+  />
 
-        {/* Desktop Navbar */}
-        <div className="hidden md:block">
-          <ul className="flex gap-6 text-gray-300">
-            {[
-              "Home",
-              "Education",
-              "Projects",
-              "Achievements",
-              "Skills",
-              "About",
-              "Contact",
-            ].map((item) => (
-              <li key={item}>
-                <button
-                  onClick={(e) => {
-                    e.preventDefault();
-                    scrollToSection(item.toLowerCase());
-                  }}
-                  className="hover:text-orange-400 transition px-2 py-1 text-sm text-gray-300"
-                  aria-label={`Go to ${item}`}
-                >
-                  {item}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
+  <div className="relative w-full max-w-6xl mx-auto flex items-center justify-between py-3 px-4">
+    {/* Logo title */}
+    <motion.div
+      id="navbar-title"
+      className="text-orange-500 font-semibold text-lg md:text-xl z-10"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 0 }}
+    >
+      SAHIL HIRVE
+    </motion.div>
 
-        {/* Mobile Dropdown */}
-        <div className="md:hidden">
-          <select
-            onChange={(e) => {
-              const val = e.target.value;
-              if (val) scrollToSection(val);
+    {/* Desktop Navbar */}
+    <div className="hidden md:block relative z-10">
+      <ul className="flex gap-6 text-gray-300 relative">
+        {/* Background behind active tab */}
+        <AnimatePresence>
+          {active && (
+            <motion.div
+              key={active}
+              className="absolute top-0 left-0 h-full bg-white/15 rounded-md -z-10"
+              layoutId="activeHighlight"
+              transition={{
+                type: "spring",
+                stiffness: 400,
+                damping: 30,
+              }}
+            />
+          )}
+        </AnimatePresence>
+
+        {[
+          "Home",
+          "Education",
+          "Projects",
+          "Achievements",
+          "Skills",
+          "About",
+          "Contact",
+        ].map((item) => (
+          <motion.li
+            key={item}
+            onClick={(e) => {
+              e.preventDefault();
+              setActive(item);
+              scrollToSection(item.toLowerCase());
             }}
-            className="bg-black text-gray-300 border border-gray-700 p-2 rounded"
-            aria-label="Navigate sections"
-            defaultValue=""
+            className={`relative cursor-pointer transition-all duration-300 ${
+              active === item ? "font-bold text-black" : "text-gray-300"
+            }`}
+            animate={{
+              letterSpacing: active === item ? "0.2em" : "0em",
+              scale: active === item ? 1.1 : 1,
+            }}
+            transition={{ type: "spring", stiffness: 250, damping: 20 }}
           >
-            <option value="" disabled>
-              Navigate
-            </option>
-            {[
-              "home",
-              "education",
-              "projects",
-              "achievements",
-              "skills",
-              "about",
-              "contact",
-            ].map((s) => (
-              <option key={s} value={s}>
-                {s.charAt(0).toUpperCase() + s.slice(1)}
-              </option>
-            ))}
-          </select>
-        </div>
-      </div>
-    </nav>
+            {item}
+          </motion.li>
+        ))}
+      </ul>
+    </div>
+
+    {/* Mobile Dropdown */}
+    <div className="md:hidden z-10">
+      <select
+        onChange={(e) => {
+          const val = e.target.value;
+          if (val) {
+            setActive(val.charAt(0).toUpperCase() + val.slice(1));
+            scrollToSection(val);
+          }
+        }}
+        className="bg-black/60 text-gray-300 border border-gray-700 p-2 rounded backdrop-blur-md"
+        aria-label="Navigate sections"
+        defaultValue=""
+      >
+        <option value="" disabled>
+          Navigate
+        </option>
+        {[
+          "home",
+          "education",
+          "projects",
+          "achievements",
+          "skills",
+          "about",
+          "contact",
+        ].map((s) => (
+          <option key={s} value={s}>
+            {s.charAt(0).toUpperCase() + s.slice(1)}
+          </option>
+        ))}
+      </select>
+    </div>
+  </div>
+</nav>
   );
 }
