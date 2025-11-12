@@ -4,95 +4,137 @@ import gsap from "gsap";
 
 export default function Loader({ onComplete }) {
   const [progress, setProgress] = useState(0);
-  const tl = useRef(null);
+  const waveRef = useRef(null);
 
-  // Progress counter
   useEffect(() => {
-    let num = 0;
-    const interval = setInterval(() => {
-      num += 1;
-      setProgress(num);
-      if (num === 100) {
-        clearInterval(interval);
-        setTimeout(() => onComplete && onComplete(), 600);
-      }
-    }, 30);
-    return () => clearInterval(interval);
+    // Progress % counter
+    gsap.to({}, {
+      duration: 4,
+      ease: "none",
+      onUpdate: function () {
+        const p = Math.min(Math.round(this.progress() * 100), 100);
+        setProgress(p);
+      },
+      onComplete: () => {
+        gsap.to(".loader-container", {
+          opacity: 0,
+          duration: 1,
+          delay: 0.5,
+          onComplete,
+        });
+      },
+    });
+
+    // Sine wave movement
+    gsap.to(waveRef.current, {
+      x: "-50%",
+      duration: 2,
+      repeat: -1,
+      ease: "linear",
+    });
   }, [onComplete]);
 
-  // GSAP animation for text
-  useEffect(() => {
-    tl.current = gsap.timeline({ defaults: { ease: "power2.inOut", duration: 0.6 } });
-
-    tl.current
-      .from(".loader-s", { opacity: 0, scale: 0, y: 50 })
-      .to(".loader-ahil", { x: 0, opacity: 1 })
-      .to(".loader-sahil", { x: -60 })
-      .from(".loader-h", { opacity: 0, scale: 0, y: 50 })
-      .to(".loader-irve", { x: 0, opacity: 1 })
-      .to(".loader-sahil", { x: 0, delay: 0.3 })
-      .to(".loader-wrapper", { opacity: 0, duration: 1, delay: 0.6 });
-  }, []);
-
   return (
-    <motion.div
-      className="loader-wrapper fixed inset-0 bg-black flex flex-col justify-center items-center z-[1000]"
-      initial={{ opacity: 1 }}
-      animate={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-    >
-      {/* Text Animation */}
-      <div className="relative text-6xl md:text-8xl font-bold text-orange-500 flex flex-col items-center justify-center overflow-hidden h-32">
-        <div className="relative flex items-center justify-center">
-          <motion.span className="loader-s inline-block mr-2">S</motion.span>
-          <motion.span
-            className="loader-ahil inline-block opacity-0 translate-x-[-50px]"
-            style={{ transform: "translateX(-80px)" }}
-          >
-            ahil
-          </motion.span>
-        </div>
+    <div className="loader-container fixed inset-0 bg-black flex flex-col items-center justify-center overflow-hidden z-50 text-white">
+      {/* Animated Name Sequence */}
+      <div className="relative text-6xl md:text-7xl font-bold tracking-wide text-orange-500 flex items-center justify-center h-32 overflow-hidden">
+        {/* S */}
+        <motion.span
+          className="absolute"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6 }}
+        >
+          S
+        </motion.span>
 
-        <div className="relative flex items-center justify-center mt-2">
-          <motion.span className="loader-h inline-block mr-2 opacity-0">H</motion.span>
+        {/* ahil */}
+        <motion.span
+          className="absolute left-1/2 transform -translate-x-[200%]"
+          initial={{ opacity: 0, x: -100 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 0.6, duration: 0.8 }}
+        >
+          ahil
+        </motion.span>
+
+        {/* Sahil moves left */}
+        <motion.div
+          className="absolute"
+          initial={{ x: 0, opacity: 1 }}
+          animate={{ x: "-150%", opacity: 1 }}
+          transition={{ delay: 1.5, duration: 1 }}
+        >
+          Sahil
+        </motion.div>
+
+        {/* H */}
+        <motion.span
+          className="absolute"
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ delay: 2.1, duration: 0.6 }}
+        >
+          H
+        </motion.span>
+
+        {/* irve */}
+        <motion.span
+          className="absolute right-1/2 transform translate-x-[200%]"
+          initial={{ opacity: 0, x: 100 }}
+          animate={{ opacity: 1, x: 0 }}
+          transition={{ delay: 2.4, duration: 0.8 }}
+        >
+          irve
+        </motion.span>
+
+        {/* Final alignment & fade out */}
+        <motion.div
+          className="absolute flex gap-8"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 3.4, duration: 0.8 }}
+        >
           <motion.span
-            className="loader-irve inline-block opacity-0 translate-x-[-50px]"
-            style={{ transform: "translateX(-80px)" }}
+            animate={{ letterSpacing: "0.25em", opacity: 0 }}
+            transition={{ delay: 4, duration: 1.5 }}
           >
-            irve
+            SAHIL
           </motion.span>
-        </div>
+          <motion.span
+            animate={{ letterSpacing: "0.25em", opacity: 0 }}
+            transition={{ delay: 4, duration: 1.5 }}
+          >
+            HIRVE
+          </motion.span>
+        </motion.div>
       </div>
 
-      {/* Progress Bar */}
-      <div className="mt-12 flex items-center gap-4 w-64 md:w-96">
-        <div className="relative w-full h-4 bg-gray-800 rounded-full overflow-hidden">
-          <div
-            className="absolute top-0 left-0 h-full bg-gradient-to-r from-orange-500 to-red-500"
-            style={{ width: `${progress}%` }}
-          ></div>
-          <div className="wave absolute top-0 left-0 w-full h-full opacity-40"></div>
-        </div>
-        <span className="text-orange-400 text-lg font-semibold">{progress}%</span>
+      {/* Wave Progress Bar */}
+      <div className="absolute bottom-12 w-2/3 h-6 bg-gray-800 rounded-full overflow-hidden">
+        <svg
+          className="w-full h-full"
+          viewBox="0 0 120 20"
+          preserveAspectRatio="none"
+        >
+          <path
+            ref={waveRef}
+            d="M0,10 Q10,0 20,10 T40,10 T60,10 T80,10 T100,10 T120,10 V20 H0 Z"
+            fill="url(#waveGradient)"
+          />
+          <defs>
+            <linearGradient id="waveGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+              <stop offset="0%" stopColor="#ff6600" />
+              <stop offset="100%" stopColor="#ff3300" />
+            </linearGradient>
+          </defs>
+        </svg>
       </div>
 
-      {/* Wavy effect */}
-      <style>{`
-        .wave {
-          background: repeating-linear-gradient(
-            -45deg,
-            rgba(255,255,255,0.2) 0px,
-            rgba(255,255,255,0.2) 10px,
-            transparent 10px,
-            transparent 20px
-          );
-          animation: waveMove 2s linear infinite;
-        }
-        @keyframes waveMove {
-          0% { background-position-x: 0; }
-          100% { background-position-x: 40px; }
-        }
-      `}</style>
-    </motion.div>
+      {/* Percentage Counter */}
+      <div className="absolute bottom-12 right-[17%] text-xl font-mono text-orange-400">
+        {progress}%
+      </div>
+    </div>
   );
 }
