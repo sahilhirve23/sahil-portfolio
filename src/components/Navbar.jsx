@@ -10,42 +10,62 @@ const [active, setActive] = useState("Home");
 const [hoverPos, setHoverPos] = useState({ x: 0, y: 0 });
 
   useEffect(() => {
-    // Animate Hero title (center) → Navbar position
-    gsap.fromTo(
-      "#hero-title",
-      { scale: 1, y: 0, x: 0, opacity: 1 },
-      {
-        scale: 0.4,
-        x: "-34vw",
-        y: "-20vh",
-        opacity: 0,
-        ease: "power3.inOut",
-        scrollTrigger: {
-          trigger: "#home",
-          start: "top top",
-          end: "35% top",
-          scrub: 1.1,
-          onUpdate: (self) => {
-            const progress = self.progress;
-            const adjustedProgress = Math.max(
-              0,
-              Math.min((progress - 0.2) * 1.25, 1)
-            );
-            gsap.to("#navbar-title", {
-              opacity: adjustedProgress,
-              y: adjustedProgress * 3 - 3,
-              duration: 0.15,
-              ease: "power2.out",
-            });
-          },
+  gsap.fromTo(
+    "#hero-title",
+    { scale: 1, y: 0, x: 0, opacity: 1 },
+    {
+      scale: 0.4,
+      x: "-34vw",
+      y: "-20vh",
+      opacity: 0,
+      ease: "power3.inOut",
+      scrollTrigger: {
+        trigger: "#home",
+        start: "top top",
+        end: "35% top",
+        scrub: 1.1,
+        onUpdate: (self) => {
+          const progress = Math.max(0, Math.min((self.progress - 0.2) * 1.25, 1));
+          gsap.to("#navbar-title", {
+            opacity: progress > 0 ? 1 : 0, // stays visible after leaving home
+            y: progress * 3 - 3,
+            duration: 0.15,
+            ease: "power2.out",
+          });
         },
+      },
+    }
+  );
+}, []);
+useEffect(() => {
+  const sections = document.querySelectorAll("section");
+  const handleScroll = () => {
+    let current = "";
+    sections.forEach((section) => {
+      const sectionTop = section.offsetTop - 100;
+      if (window.scrollY >= sectionTop) {
+        current = section.getAttribute("id");
       }
-    );
-  }, []);
+    });
+    if (current) {
+      setActive(current.charAt(0).toUpperCase() + current.slice(1));
+    }
+  };
+  window.addEventListener("scroll", handleScroll);
+  return () => window.removeEventListener("scroll", handleScroll);
+}, []);
+
 
   return (
     <nav
-  className="fixed top-0 w-full z-50 backdrop-blur-xl bg-white/10 border-b border-white/20
+      <nav
+  className="fixed top-0 w-full z-50 backdrop-blur-xl bg-white/10 hover:bg-white/20
+             shadow-[inset_0_0_0.5px_rgba(255,255,255,0.4)] overflow-hidden
+             transition-colors duration-700 ease-in-out"
+  onMouseMove={(e) => setHoverPos({ x: e.clientX, y: e.clientY })}
+>
+
+  className="fixed top-0 w-full z-50 backdrop-blur-xl bg-white/10 
              shadow-[inset_0_0_0.5px_rgba(255,255,255,0.4)] overflow-hidden"
   onMouseMove={(e) => setHoverPos({ x: e.clientX, y: e.clientY })}
 >
@@ -104,8 +124,9 @@ const [hoverPos, setHoverPos] = useState({ x: 0, y: 0 });
               scrollToSection(item.toLowerCase());
             }}
             className={`relative cursor-pointer transition-all duration-300 ${
-              active === item ? "font-bold text-black" : "text-gray-300"
-            }`}
+  active === item ? "font-bold text-orange-400" : "text-gray-300 hover:text-orange-300"
+}`}
+
             animate={{
               letterSpacing: active === item ? "0.2em" : "0em",
               scale: active === item ? 1.1 : 1,
