@@ -1,20 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 import ReactDOM from "react-dom/client";
-import Loader from "./components/Loader";
-import App from "./App";
-
-function Root() {
-  const [isLoading, setIsLoading] = useState(true);
-
-  return isLoading ? (
-    <Loader onComplete={() => setIsLoading(false)} />
-  ) : (
-    <App />
-  );
-}
+import App from "./App.jsx";
+import "./index.css";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <Root />
+    <App />
   </React.StrictMode>
 );
