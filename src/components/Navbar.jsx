@@ -76,7 +76,8 @@ useEffect(() => {
       id="navbar-title"
       className="text-orange-500 font-semibold text-lg md:text-xl z-10"
       initial={{ opacity: 0 }}
-      animate={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+  transition={{ duration: 0.6, ease: "easeOut" }}
     >
       SAHIL HIRVE
     </motion.div>
