@@ -58,12 +58,6 @@ useEffect(() => {
 
   return (
     <nav
-  <className="fixed top-0 w-full z-50 backdrop-blur-xl bg-white/10 hover:bg-white/20
-             shadow-[inset_0_0_0.5px_rgba(255,255,255,0.4)] overflow-hidden
-             transition-colors duration-700 ease-in-out"
-  onMouseMove={(e) => setHoverPos({ x: e.clientX, y: e.clientY })}
->
-
   className="fixed top-0 w-full z-50 backdrop-blur-xl bg-white/10 
              shadow-[inset_0_0_0.5px_rgba(255,255,255,0.4)] overflow-hidden"
   onMouseMove={(e) => setHoverPos({ x: e.clientX, y: e.clientY })}
