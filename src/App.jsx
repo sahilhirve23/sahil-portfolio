@@ -1,4 +1,5 @@
-import React, { useEffect, useRef } from 'react';
+import Loader from "./components/Loader";
+import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
@@ -8,6 +9,7 @@ import { FaInstagram, FaLinkedin, FaGithub, FaYoutube, FaSpotify, FaXTwitter } f
 gsap.registerPlugin(ScrollTrigger);
 
 export default function App() {
+  const [isLoading, setIsLoading] = useState(true);
   const sectionsRef = useRef([]);
   const lenisRef = useRef(null);
 
@@ -79,22 +81,11 @@ export default function App() {
   const addToRefs = (el) => {
     if (el && !sectionsRef.current.includes(el)) sectionsRef.current.push(el);
   };
+if (isLoading) return <Loader onComplete={() => setIsLoading(false)} />;
 
   return (
     <div className="bg-black text-gray-200 overflow-x-hidden scroll-smooth">
-      {/* Loader */}
-      <motion.div
-        initial={{ opacity: 1 }}
-        animate={{ opacity: 0 }}
-        transition={{ delay: 2.5, duration: 1 }}
-        className="fixed inset-0 bg-black flex items-center justify-center z-50 text-5xl font-bold text-orange-500"
-      >
-        {Array.from('SAHIL HIRVE').map((char, i) => (
-          <motion.span key={i} initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}>
-            {char}
-          </motion.span>
-        ))}
-      </motion.div>
+      
 
       {/* Navbar */}
       <nav className="fixed top-0 w-full z-50 bg-black/60 backdrop-blur-sm flex items-center justify-center py-3 px-4">
