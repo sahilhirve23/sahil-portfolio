@@ -99,7 +99,7 @@ if (isLoading) return <Loader onComplete={() => setIsLoading(false)} />;
 
 
       {/* Education Section */}
-      <section id="education" ref={addToRefs} className="min-h-screen flex flex-col justify-center px-6 md:px-10 bg-[url('/assets/images/test2.jpg')] bg-cover md:bg-fixed bg-local">
+      <section id="education" ref={addToRefs} className="min-h-screen flex flex-col justify-center px-6 md:px-10 bg-[url('/assets/images/test.jpg')] bg-cover md:bg-fixed bg-local">
         <h2 className="text-4xl text-orange-500 mb-8">Education & Experience</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <motion.div className="space-y-4" initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
@@ -117,7 +117,7 @@ if (isLoading) return <Loader onComplete={() => setIsLoading(false)} />;
       </section>
 
       {/* Projects Section */}
-      <section id="projects" ref={addToRefs} className="min-h-screen px-6 py-12 md:px-10 md:py-16 bg-[url('/assets/images/test3.jpg')] bg-cover md:bg-fixed bg-local">
+      <section id="projects" ref={addToRefs} className="min-h-screen px-6 py-12 md:px-10 md:py-16 bg-[url('/assets/images/test.jpg')] bg-cover md:bg-fixed bg-local">
         <h2 className="text-4xl text-orange-500 mb-8">Projects</h2>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {['Image Forgery Detection', 'Autoencoder-Based Image Compression', 'Codemind LMS'].map((proj) => (
@@ -130,7 +130,7 @@ if (isLoading) return <Loader onComplete={() => setIsLoading(false)} />;
       </section>
 
       {/* Achievements Section */}
-      <section id="achievements" ref={addToRefs} className="min-h-screen px-6 py-12 md:px-10 md:py-16 bg-[url('/assets/images/test4.jpg')] bg-cover md:bg-fixed bg-local certificates-section">
+      <section id="achievements" ref={addToRefs} className="min-h-screen px-6 py-12 md:px-10 md:py-16 bg-[url('/assets/images/test.jpg')] bg-cover md:bg-fixed bg-local certificates-section">
         <h2 className="text-4xl text-orange-500 mb-6">Achievements & Certifications</h2>
         <motion.ul className="list-disc ml-6 space-y-2" initial={{ opacity: 0, y: 40 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.7 }}>
           <li>🏆 Best Paper Award – ICCEUBEA 2025</li>
@@ -146,7 +146,7 @@ if (isLoading) return <Loader onComplete={() => setIsLoading(false)} />;
       </section>
 
       {/* Skills Section */}
-      <section id="skills" ref={addToRefs} className="min-h-screen px-6 py-12 md:px-10 md:py-16 bg-[url('/assets/images/test5.jpg')] bg-cover md:bg-fixed bg-local">
+      <section id="skills" ref={addToRefs} className="min-h-screen px-6 py-12 md:px-10 md:py-16 bg-[url('/assets/images/test.jpg')] bg-cover md:bg-fixed bg-local">
         <h2 className="text-4xl text-orange-500 mb-6">Skills & Hobbies</h2>
         <div className="grid md:grid-cols-2 gap-10">
           <motion.div initial={{ opacity: 0, y: 50 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
@@ -172,7 +172,7 @@ if (isLoading) return <Loader onComplete={() => setIsLoading(false)} />;
       </section>
 
       {/* About Section */}
-      <section id="about" ref={addToRefs} className="min-h-screen px-6 py-12 md:px-10 md:py-16 bg-[url('/assets/images/test6.jpg')] bg-cover md:bg-fixed bg-local">
+      <section id="about" ref={addToRefs} className="min-h-screen px-6 py-12 md:px-10 md:py-16 bg-[url('/assets/images/test.jpg')] bg-cover md:bg-fixed bg-local">
         <h2 className="text-4xl text-orange-500 mb-8">About Me</h2>
         <div className="grid md:grid-cols-2 gap-10 items-center">
           <motion.div initial={{ opacity: 0, scale: 0.95 }} whileInView={{ opacity: 1, scale: 1 }} transition={{ duration: 0.8 }}>
