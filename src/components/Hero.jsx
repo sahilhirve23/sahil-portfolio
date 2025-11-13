@@ -1,4 +1,5 @@
 // src/components/Hero.jsx
+import heroBg from "./assets/images/hero-background.jpg";
 import React, { useEffect } from "react";
 import { motion } from "framer-motion";
 import gsap from "gsap";
@@ -18,10 +19,9 @@ export default function Hero({ scrollToSection, addToRefs, handleDownload }) {
 
   return (
     <section
-  id="home"
-  ref={addToRefs}
-  className="relative h-screen flex flex-col justify-center items-start pl-20 
-             bg-[url('/assets/images/test1.jpg')] bg-cover bg-center md:bg-fixed"
+      id="home"
+  style={{ backgroundImage: `url(${heroBg})` }}
+  className="relative h-screen bg-cover bg-center md:bg-fixed flex flex-col justify-center items-start pl-20"
 >
 
   {/* SIDE GRADIENT VIGNETTE */}
