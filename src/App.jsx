@@ -1,5 +1,6 @@
 import Loader from "./components/Loader.jsx";
 import Navbar from "./components/Navbar";
+import Hero from "./components/Hero";
 import React, { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import gsap from 'gsap';
@@ -93,19 +94,9 @@ if (isLoading) return <Loader onComplete={() => setIsLoading(false)} />;
 
 
       {/* Hero Section */}
-      <section id="home" ref={addToRefs} className="h-screen flex flex-col justify-center items-center bg-[url('/assets/images/test1.jpg')] bg-cover bg-center relative">
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 to-black"></div>
-        <motion.h1 className="text-5xl md:text-6xl font-bold text-white relative z-10" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }}>
-          SAHIL HIRVE
-        </motion.h1>
-        <motion.p className="text-base md:text-lg mt-4 text-gray-300 z-10" initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}>
-          Business Analyst | AI/ML Enthusiast | Researcher | Developer
-        </motion.p>
-        <div className="flex gap-4 mt-6 z-10">
-          <button onClick={handleDownload} className="px-5 py-2 bg-orange-600 rounded-lg hover:bg-orange-500 transition">View My Profile</button>
-          <button onClick={() => scrollToSection('about')} className="px-5 py-2 bg-gray-800 rounded-lg hover:bg-gray-700 transition">Contact Me</button>
-        </div>
-      </section>
+      {/* Hero */}
+<Hero scrollToSection={scrollToSection} addToRefs={addToRefs} handleDownload={handleDownload} />
+
 
       {/* Education Section */}
       <section id="education" ref={addToRefs} className="min-h-screen flex flex-col justify-center px-6 md:px-10 bg-[url('/assets/images/test2.jpg')] bg-cover md:bg-fixed bg-local">
