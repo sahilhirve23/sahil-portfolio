@@ -1,5 +1,5 @@
 // src/components/Hero.jsx
-import heroBg from "./assets/images/hero-background.jpg";
+import heroBg from "../assets/images/hero-background.jpg";
 import React, { useEffect } from "react";
 import { motion } from "framer-motion";
 import gsap from "gsap";
