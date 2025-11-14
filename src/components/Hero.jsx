@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, Fragment } from "react";
 // Import useState for tracking hover and AnimatePresence for the pop-up
 import { motion, AnimatePresence } from "framer-motion";
 // We will import GSAP dynamically inside useEffect
 
 // --- 1. Data for your 5 roles ---
-// We use this array to build both the text and the dots
 const rolesData = [
   {
     id: 0,
@@ -45,8 +44,6 @@ export default function Hero({ scrollToSection, addToRefs, handleDownload }) {
 
   useEffect(() => {
     // --- 3. DYNAMICALLY IMPORT GSAP ---
-    // We import gsap and ScrollTrigger inside useEffect
-    // to load them at runtime, bypassing the build-time error.
     async function loadGsap() {
       try {
         // Use a CDN that serves ES modules
@@ -57,8 +54,6 @@ export default function Hero({ scrollToSection, addToRefs, handleDownload }) {
         gsap.registerPlugin(ScrollTrigger);
 
         // --- 4. RUN GSAP ANIMATION ---
-        // Now that gsap and ScrollTrigger are loaded, we can run
-        // the animation code that depends on them.
         gsap.to("#hero-bg", {
           backgroundPositionX: "120%", // moves background horizontally
           ease: "none",
@@ -78,6 +73,9 @@ export default function Hero({ scrollToSection, addToRefs, handleDownload }) {
     loadGsap();
     
   }, []); // Empty dependency array, so it runs once on mount
+
+  // --- 5. Download URL for Resume ---
+  const resumeDownloadUrl = "https://drive.google.com/uc?export=download&id=1lFH6wPMJVXBsApFUOz_0hnqNvC7tySCA";
 
   return (
     <section
@@ -105,71 +103,89 @@ export default function Hero({ scrollToSection, addToRefs, handleDownload }) {
       </div>
 
       {/* LAYER 3: CONTENT (z-20) */}
-      {/* We add 'overflow-hidden' to the parent section to prevent popups from going outside */}
       <div className="relative z-20 h-full w-full 
                       flex flex-col justify-center items-start pl-20">
         <motion.h1
           id="hero-title"
           className="text-7xl md:text-8xl font-extrabold text-white relative z-20"
+          
+          // --- FIX 1: Corrected hover effect ---
           whileHover={{
-            color: "rgba(255,255,25Just 5,0)",
-            WebkitTextStroke: "2px #ff7a00",
+            color: "transparent", // Makes fill transparent
+            WebkitTextStroke: "2px #ff7a00", // Keeps orange stroke
+            scale: 1.05 // Scales up
           }}
+          // Transition is a separate prop, not inside whileHover
+          transition={{ type: "spring", stiffness: 400, damping: 15 }}
         >
           SAHIL HIRVE
         </motion.h1>
 
-        {/* --- 3. Interactive Roles List --- */}
-        {/* This is the new subtitle section */}
-        <div className="mt-4 flex flex-row flex-wrap items-center 
-                        text-lg md:text-xl text-gray-300 gap-x-2">
-          {rolesData.map((role, index) => (
-            <React.Fragment key={role.id}>
-              {/* This will force "Computer Engineer" to a new line */}
-              {role.title === "Computer Engineer" && <div className="w-full h-2"></div>}
+        {/* --- FIX 2: Translucent Background Box --- */}
+        <div className="bg-black/60 backdrop-blur-sm rounded-md p-3 mt-4 max-w-4xl">
+          <div className="flex flex-row flex-wrap items-center 
+                          text-lg md:text-xl text-gray-300 gap-x-2">
+            {rolesData.map((role, index) => (
+              <Fragment key={role.id}>
+                {/* This will force "Computer Engineer" to a new line */}
+                {role.title === "Computer Engineer" && <div className="w-full h-2"></div>}
 
-              <motion.span
-                className="cursor-pointer font-semibold" // Made text bold
-                // Set the state on hover
-                onMouseEnter={() => setHoveredIndex(role.id)}
-                // Animate scale based on hoveredIndex
-                animate={{
-                  scale: hoveredIndex === role.id ? 1.15 : 1,
-                  color:
-                    hoveredIndex === role.id
-                      ? "rgb(251 146 60)" // orange-400
-                      : "rgb(209 213 219)", // gray-300
-                }}
-                transition={{ type: "spring", stiffness: 400, damping: 10 }}
-              >
-                {role.title}
-              </motion.span>
+                <motion.span
+                  className="cursor-pointer font-semibold" // Made text bold
+                  onMouseEnter={() => setHoveredIndex(role.id)}
+                  animate={{
+                    scale: hoveredIndex === role.id ? 1.15 : 1,
+                    color:
+                      hoveredIndex === role.id
+                        ? "rgb(251 146 60)" // orange-400
+                        : "rgb(209 213 219)", // gray-300
+                  }}
+                  transition={{ type: "spring", stiffness: 400, damping: 10 }}
+                >
+                  {role.title}
+                </motion.span>
 
-              {/* Add a separator, but not after the last item */}
-              {index < rolesData.length - 1 &&
-                // Don't add a separator right before the line break
-                rolesData[index + 1].title !== "Computer Engineer" && (
-                  <span className="text-gray-500 select-none mx-1">•</span> // Changed to a dot
-                )}
-            </React.Fragment>
-          ))}
+                {/* Add a separator */}
+                {index < rolesData.length - 1 &&
+                  rolesData[index + 1].title !== "Computer Engineer" && (
+                    <span className="text-gray-500 select-none mx-1">•</span>
+                  )}
+              </Fragment>
+            ))}
+          </div>
         </div>
 
+        {/* --- FIX 4: Animated Buttons --- */}
         <div className="flex gap-4 mt-6">
-          <button className="px-5 py-2 bg-orange-600 rounded-lg hover:bg-orange-500 transition">
+          <motion.button 
+            className="px-5 py-2 bg-orange-600 rounded-lg" // Removed hover: and transition
+            onClick={() => window.open(resumeDownloadUrl, '_blank')}
+            whileHover={{ 
+              scale: 1.05,
+              backgroundColor: "#ea580c" // This is Tailwind's orange-500
+            }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ type: "spring", stiffness: 400, damping: 17 }}
+          >
             View My Profile
-          </button>
-          <button
+          </motion.button>
+          
+          <motion.button
             onClick={() => scrollToSection("about")}
-            className="px-5 py-2 bg-gray-800 rounded-lg hover:bg-gray-700 transition"
+            className="px-5 py-2 bg-gray-800 rounded-lg" // Removed hover: and transition
+            whileHover={{ 
+              scale: 1.05,
+              backgroundColor: "#374151" // This is Tailwind's gray-700
+            }}
+            whileTap={{ scale: 0.95 }}
+            transition={{ type: "spring", stiffness: 400, damping: 17 }}
           >
             Contact Me
-          </button>
+          </motion.button>
         </div>
       </div>
 
-      {/* --- 4. Dots and Description Boxes --- */}
-      {/* This is the new dots section */}
+      {/* --- Dots and Description Boxes --- */}
       <div className="absolute z-30 right-10 md:right-20 top-1/2 -translate-y-1/2">
         <div className="flex flex-col gap-6">
           {rolesData.map((role) => (
@@ -182,7 +198,6 @@ export default function Hero({ scrollToSection, addToRefs, handleDownload }) {
               {/* The Dot */}
               <motion.div
                 className="w-3 h-3 bg-gray-400 rounded-full cursor-pointer"
-                // Animate scale based on hoveredIndex
                 animate={{
                   scale: hoveredIndex === role.id ? 2 : 1,
                   backgroundColor:
@@ -193,30 +208,19 @@ export default function Hero({ scrollToSection, addToRefs, handleDownload }) {
                 transition={{ type: "spring", stiffness: 400, damping: 10 }}
               />
 
-              {/* --- 5. Animated Description Box --- */}
+              {/* --- Animated Description Box --- */}
               <AnimatePresence>
                 {hoveredIndex === role.id && (
                   <motion.div
-                    // Positioned to the left of the dot
                     className="absolute right-full top-1/2 -translate-y-1/2 mr-6 
                                w-64 p-4 bg-black/80 backdrop-blur-lg 
                                border border-gray-700 rounded-lg shadow-xl"
-                    
-                    // We set transformOrigin so it scales from the dot
                     style={{ transformOrigin: "right center" }}
-                    
-                    // Animation: starts small/faded/shifted right
                     initial={{ opacity: 0, scale: 0.5, x: 20 }}
-                    
-                    // Animates to: full size/opacity at its final spot
                     animate={{ opacity: 1, scale: 1, x: 0 }}
-                    
-                    // Exits to: small/faded/shifted right (back "into" the dot)
                     exit={{ opacity: 0, scale: 0.5, x: 20 }}
-                    
                     transition={{ type: "spring", stiffness: 300, damping: 20 }}
                   >
-                    {/* Increased font sizes here */}
                     <p className="text-white text-base font-semibold mb-1">
                       {role.title}
                     </p>
