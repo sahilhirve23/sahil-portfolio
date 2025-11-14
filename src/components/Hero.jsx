@@ -57,15 +57,10 @@ export default function Hero({ scrollToSection, addToRefs, handleDownload }) {
       >
         <motion.h1
   id="hero-title"
-  // REMOVED "transition-all duration-300" to stop CSS from fighting GSAP
   className="text-7xl md:text-8xl font-extrabold text-white relative z-20"
-  
-  // REMOVED initial, whileInView, and transition. 
-  // Your GSAP 'fromTo' in Navbar.jsx handles this now.
-
-  whileHover={{
-    // REMOVED 'scale' and 'opacity'. GSAP is in charge of those.
-    // We can keep the color and stroke animations as GSAP isn't touching them.
+   whileHover={{
+    whileHover={{ scale: 1.15 }} // How big to scale on hover
+  transition={{ type: "spring", stiffness: 400, damping: 15 }}
     color: "rgba(255,255,255,0)",
     WebkitTextStroke: "2px #ff7a00",
   }}
