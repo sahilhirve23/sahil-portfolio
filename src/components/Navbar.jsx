@@ -14,8 +14,8 @@ const [hoverPos, setHoverPos] = useState({ x: 0, y: 0 });
     "#hero-title",
     { scale: 1, y: 0, x: 0, opacity: 1 },
     {
-      scale: 0.35,
-      x: "-8vw",
+      scale: 0.2,
+      x: "-2vw",
       y: "-22vh",
       opacity: 0,
       ease: "power3.inOut",
