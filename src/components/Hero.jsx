@@ -33,7 +33,7 @@ export default function Hero({ scrollToSection, addToRefs, handleDownload }) {
         className="absolute inset-0 z-0 bg-cover bg-center md:bg-fixed"
         style={{
           // Using a placeholder image since heroBg isn't available here.
-          backgroundImage: `url(https://placehold.co/1920x1080/2d3748/e2e8f0?text=Portfolio+Background)`,
+          backgroundImage: `url(https://analytics.hbs.edu/wp-content/uploads/sites/15/2020/10/BizAnalytics_vs_Intelligence-Hero.jpg)`,
         }}
       ></div>
 
