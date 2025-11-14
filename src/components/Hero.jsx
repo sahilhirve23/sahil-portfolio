@@ -60,7 +60,7 @@ export default function Hero({ scrollToSection, addToRefs, handleDownload }) {
   className="text-7xl md:text-8xl font-extrabold text-white relative z-20 transition-all duration-300"
   initial={{ opacity: 0, y: 20 }}
   whileInView={{ opacity: 1, y: 0 }}
-  transition={{ duration: 0.8 }}
+  transition={{ duration: 0.1 }}
   whileHover={{
     scale: 1.25,
     color: "rgba(255,255,255,0)",
