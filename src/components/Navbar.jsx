@@ -73,14 +73,11 @@ useEffect(() => {
   <div className="relative w-full max-w-6xl mx-auto flex items-center justify-between py-3 px-4">
     {/* Logo title */}
     <motion.div
-      id="navbar-title"
-      className="text-orange-500 font-semibold text-lg md:text-xl z-10"
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-  transition={{ duration: 1, ease: "easeOut" }}
-    >
-      SAHIL HIRVE
-    </motion.div>
+  id="navbar-title"
+  className="text-orange-500 font-semibold text-lg md:text-xl z-10 opacity-0" 
+>
+  SAHIL HIRVE
+</motion.div>
 
     {/* Desktop Navbar */}
     <div className="hidden md:block relative z-10">
