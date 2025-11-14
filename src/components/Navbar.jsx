@@ -14,8 +14,8 @@ const [hoverPos, setHoverPos] = useState({ x: 0, y: 0 });
     "#hero-title",
     { scale: 1, y: 0, x: 0, opacity: 1 },
     {
-      scale: 0.2,
-      x: "-2vw",
+      scale: 0.1,
+      x: "22vw",
       y: "-22vh",
       opacity: 0,
       ease: "power3.inOut",
@@ -77,7 +77,7 @@ useEffect(() => {
       className="text-orange-500 font-semibold text-lg md:text-xl z-10"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
-  transition={{ duration: 0.6, ease: "easeOut" }}
+  transition={{ duration: 1, ease: "easeOut" }}
     >
       SAHIL HIRVE
     </motion.div>
