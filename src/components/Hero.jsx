@@ -1,24 +1,27 @@
 import React, { useEffect } from "react";
 import { motion } from "framer-motion";
-// Your import "import heroBg from '../assets/images/hero-background.jpg';"
-// was correct, but is removed here as this environment can't find the file.
-//
-// Your import "import gsap from 'gsap';" was also correct, but removed
-// as the package isn't installed here.
-// import heroBg from "../assets/images/hero-background.jpg";
-// import gsap from "gsap";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+gsap.registerPlugin(ScrollTrigger);
+
 
 export default function Hero({ scrollToSection, addToRefs, handleDownload }) {
   // Your original gsap animation code was correct.
   // I've commented it out and replaced it with a framer-motion
   // animation below to make this preview work.
-  // useEffect(() => {
-  //   gsap.fromTo(
-  //     "#hero-title",
-  //     { opacity: 0, y: 20 },
-  //     { opacity: 1, y: 0, duration: 0.8, ease: "power2.out" }
-  //   );
-  // }, []);
+  useEffect(() => {
+  gsap.to("#hero-bg", {
+    backgroundPositionX: "40%",   // moves background horizontally
+    ease: "none",
+    scrollTrigger: {
+      trigger: "#home",
+      start: "top top",
+      end: "bottom top",
+      scrub: true,
+    },
+  });
+}, []);
+
 
   return (
     <section
@@ -29,13 +32,14 @@ export default function Hero({ scrollToSection, addToRefs, handleDownload }) {
       className="relative h-screen"
     >
       {/* LAYER 1: BACKGROUND IMAGE (z-0) */}
-      <div
-        className="absolute inset-0 z-0 bg-cover bg-center md:bg-fixed"
-        style={{
-          // Using a placeholder image since heroBg isn't available here.
-          backgroundImage: `url(https://analytics.hbs.edu/wp-content/uploads/sites/15/2020/10/BizAnalytics_vs_Intelligence-Hero.jpg)`,
-        }}
-      ></div>
+     <div
+  id="hero-bg"
+  className="absolute inset-0 z-0 bg-cover bg-center"
+  style={{
+    backgroundImage: `url(https://analytics.hbs.edu/wp-content/uploads/sites/15/2020/10/BizAnalytics_vs_Intelligence-Hero.jpg)`
+  }}
+></div>
+
 
       {/* LAYER 2: GRADIENT OVERLAY (z-10) */}
       <div className="absolute inset-0 z-10 pointer-events-none">
