@@ -21,19 +21,19 @@ export default function Hero({ scrollToSection, addToRefs, handleDownload }) {
       className="relative h-screen bg-cover bg-center md:bg-fixed flex flex-col justify-center items-start pl-20"
     >
 
-      {/* LEFT & RIGHT BLACK → TRANSPARENT GRADIENT */}
+      {/* LEFT + RIGHT BLACK-TO-TRANSPARENT GRADIENT OVERLAY */}
       <div
-        className="absolute inset-0 pointer-events-none z-0"
+        className="absolute inset-0 z-20 pointer-events-none"
         style={{
           background:
-            "linear-gradient(to right, rgba(0,0,0,0.85), transparent 40%, transparent 60%, rgba(0,0,0,0.85))"
+            "linear-gradient(to right, rgba(0,0,0,0.85), transparent 35%, transparent 65%, rgba(0,0,0,0.85))",
         }}
       ></div>
 
-      {/* HERO TITLE */}
+      {/* TITLE */}
       <motion.h1
         id="hero-title"
-        className="text-5xl md:text-6xl font-bold text-white relative z-10"
+        className="text-5xl md:text-6xl font-bold text-white relative z-30"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
@@ -43,7 +43,7 @@ export default function Hero({ scrollToSection, addToRefs, handleDownload }) {
 
       {/* TAGLINE */}
       <motion.p
-        className="text-base md:text-lg mt-4 text-gray-300 z-10"
+        className="text-base md:text-lg mt-4 text-gray-300 relative z-30"
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.1 }}
@@ -52,7 +52,7 @@ export default function Hero({ scrollToSection, addToRefs, handleDownload }) {
       </motion.p>
 
       {/* BUTTONS */}
-      <div className="flex gap-4 mt-6 z-10">
+      <div className="flex gap-4 mt-6 relative z-30">
         <button
           onClick={handleDownload}
           className="px-5 py-2 bg-orange-600 rounded-lg hover:bg-orange-500 transition"
