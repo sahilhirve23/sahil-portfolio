@@ -52,15 +52,21 @@ export default function Hero({ scrollToSection, addToRefs, handleDownload }) {
                    flex flex-col justify-center items-start pl-20"
       >
         <motion.h1
-          id="hero-title"
-          className="text-5xl md:text-6xl font-bold text-white"
-          // Added this framer-motion animation as a replacement for gsap
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, ease: "easeOut" }}
-        >
-          SAHIL HIRVE
-        </motion.h1>
+  id="hero-title"
+  className="text-7xl md:text-8xl font-extrabold text-white relative z-20 transition-all duration-300"
+  initial={{ opacity: 0, y: 20 }}
+  whileInView={{ opacity: 1, y: 0 }}
+  transition={{ duration: 0.8 }}
+  whileHover={{
+    scale: 1.25,
+    color: "rgba(255,255,255,0)",
+    WebkitTextStroke: "2px #ff7a00",
+    opacity: 1,
+  }}
+>
+  SAHIL HIRVE
+</motion.h1>
+
 
         <motion.p
           className="text-base md:text-lg mt-4 text-gray-300"
