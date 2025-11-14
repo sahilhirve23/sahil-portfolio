@@ -29,7 +29,7 @@ const [hoverPos, setHoverPos] = useState({ x: 0, y: 0 });
           gsap.to("#navbar-title", {
             opacity: progress > 0 ? 1 : 0, // stays visible after leaving home
             y: progress * 3 - 3,
-            duration: 0.15,
+            duration: 1,
             ease: "power2.out",
           });
         },
