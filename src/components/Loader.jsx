@@ -218,7 +218,7 @@ export default function Loader({ onComplete }) { // Renamed from onLoaded to mat
             transition={{ duration: SAHIL_HIRVE_ZOOM_DURATION, ease: "easeIn" }}
             style={{ 
               WebkitTextStroke: "2px rgb(251 146 60)", // Orange border
-              transformOrigin: "30% 50%" // Set origin to the "S"
+              transformOrigin: "10% 50%" // Set origin to the "S"
             }}
           >
             SAHIL HIRVE
