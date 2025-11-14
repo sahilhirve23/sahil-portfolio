@@ -21,12 +21,12 @@ export default function Hero({ scrollToSection, addToRefs, handleDownload }) {
       className="relative h-screen bg-cover bg-center md:bg-fixed flex flex-col justify-center items-start pl-20"
     >
 
-      {/* LEFT + RIGHT BLACK-TO-TRANSPARENT GRADIENT OVERLAY */}
+      {/* LEFT + RIGHT BLACK → TRANSPARENT GRADIENT */}
       <div
         className="absolute inset-0 z-20 pointer-events-none"
         style={{
           background:
-            "linear-gradient(to right, rgba(0,0,0,0.85), transparent 35%, transparent 65%, rgba(0,0,0,0.85))",
+            "linear-gradient(to right, rgba(0,0,0,0.9), transparent 35%, transparent 65%, rgba(0,0,0,0.9)) !important",
         }}
       ></div>
 
