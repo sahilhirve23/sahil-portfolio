@@ -16,7 +16,7 @@ const [hoverPos, setHoverPos] = useState({ x: 0, y: 0 });
     {
       scale: 0.075,
       x: "7vw",
-      y: "-52vh",
+      y: "-32vh",
       opacity: 0,
       ease: "power3.inOut",
       scrollTrigger: {
