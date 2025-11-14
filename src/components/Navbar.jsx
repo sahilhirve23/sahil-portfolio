@@ -24,15 +24,30 @@ const [hoverPos, setHoverPos] = useState({ x: 0, y: 0 });
         start: "top top",
         end: "20% top",
         scrub: 1.1,
-        onUpdate: (self) => {
-          const progress = Math.max(0, Math.min((self.progress - 0.2) * 1.25, 1));
-          gsap.to("#navbar-title", {
-            opacity: progress > 0 ? 1 : 0, // stays visible after leaving home
-            y: progress * 3 - 3,
-            duration: 1,
-            ease: "power2.out",
-          });
-        },
+        // This is your new code
+onUpdate: (self) => {
+  // --- Tweak this value ---
+  // 0.2 = starts at 20% scroll
+  // 0.5 = starts at 50% scroll (more delayed)
+  // 0.7 = starts at 70% scroll (very delayed)
+  const startDelay = 0.5; 
+  // -------------------------
+
+  const speedMultiplier = 1 / (1 - startDelay);
+  const progress = Math.max(0, Math.min((self.progress - startDelay) * speedMultiplier, 1));
+
+  gsap.to("#navbar-title", {
+    // 1. THIS IS THE FADE: 
+    // Link opacity directly to the progress
+    opacity: progress, 
+
+    // 2. THIS IS THE DELAY:
+    // The "progress" variable itself is now delayed by "startDelay"
+    y: progress * 3 - 3,
+    duration: 0.15,
+    ease: "power2.out",
+  });
+},
       },
     }
   );
