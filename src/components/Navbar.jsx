@@ -14,15 +14,15 @@ const [hoverPos, setHoverPos] = useState({ x: 0, y: 0 });
     "#hero-title",
     { scale: 1, y: 0, x: 0, opacity: 1 },
     {
-      scale: 0.1,
-      x: "22vw",
+      scale: 0.075,
+      x: "13vw",
       y: "-22vh",
       opacity: 0,
       ease: "power3.inOut",
       scrollTrigger: {
         trigger: "#home",
         start: "top top",
-        end: "35% top",
+        end: "10% top",
         scrub: 1.1,
         onUpdate: (self) => {
           const progress = Math.max(0, Math.min((self.progress - 0.2) * 1.25, 1));
