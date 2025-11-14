@@ -2,7 +2,6 @@ import React, { useState, useEffect } from "react";
 import { motion, useMotionValue, useTransform, animate, AnimatePresence } from "framer-motion";
 
 // --- Custom useWindowSize Hook ---
-// This is included to avoid import errors.
 function useWindowSize() {
   const [size, setSize] = useState({
     width: typeof window !== 'undefined' ? window.innerWidth : 0,
@@ -42,23 +41,23 @@ const statusMessages = [
 ];
 
 // Durations for each stage (in seconds)
-const INITIAL_ORANGE_DURATION = 0.5; // How long everything is just orange
-const BLACK_CIRCLE_REVEAL_DURATION = 0.8; // How long the black circle takes to expand
-const ANALYTICAL_LOAD_DURATION = 3.5; // Your original analytical load time
-const ANALYTICAL_FADE_OUT_DURATION = 1.0; // Your "fade out slower" request
-const SAHIL_HIRVE_EXIT_DURATION = 1.2; // How long "SAHIL HIRVE" zooms out
+const INITIAL_ORANGE_DURATION = 0.5;
+const BLACK_CIRCLE_REVEAL_DURATION = 0.8;
+const ANALYTICAL_LOAD_DURATION = 3.5;
+const ANALYTICAL_FADE_OUT_DURATION = 1.0; 
+const NAME_INTRO_PAUSE = 1.2; // How long to show the name before zooming
+const SAHIL_HIRVE_ZOOM_DURATION = 1.2; // How long "SAHIL HIRVE" zooms out
 
 // -------------------------
 
-export default function Loader({ onComplete }) {
+export default function Loader({ onComplete }) { // Renamed from onLoaded to match your prop
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
-  // Stages: "initialOrange", "analytical", "exitSahilHirve"
-  const [stage, setStage] = useState("initialOrange"); 
+  // Stages: "orange", "analytical", "nameIntro", "nameZoom"
+  const [stage, setStage] = useState("orange"); 
   const count = useMotionValue(0);
   const roundedCounter = useTransform(count, (latest) => Math.round(latest));
   const windowSize = useWindowSize();
   
-  // Calculate the diagonal of the screen to ensure the circle covers everything
   const circleRadius = Math.sqrt(Math.pow(windowSize.width, 2) + Math.pow(windowSize.height, 2));
 
   // --- Stage Management Timers ---
@@ -68,19 +67,25 @@ export default function Loader({ onComplete }) {
       setStage("analytical");
     }, INITIAL_ORANGE_DURATION * 1000);
     
-    // 2. Timer to move from analytical to exit
-    const exitTimer = setTimeout(() => {
-      setStage("exitSahilHirve");
+    // 2. Timer to move from analytical to nameIntro
+    const nameIntroTimer = setTimeout(() => {
+      setStage("nameIntro");
     }, (INITIAL_ORANGE_DURATION + BLACK_CIRCLE_REVEAL_DURATION + ANALYTICAL_LOAD_DURATION) * 1000);
 
-    // 3. Timer to call onComplete and finish the loader
+    // 3. Timer to move from nameIntro to nameZoom
+    const nameZoomTimer = setTimeout(() => {
+      setStage("nameZoom");
+    }, (INITIAL_ORANGE_DURATION + BLACK_CIRCLE_REVEAL_DURATION + ANALYTICAL_LOAD_DURATION + NAME_INTRO_PAUSE) * 1000);
+
+    // 4. Timer to call onComplete and finish the loader
     const completeTimer = setTimeout(() => {
       if (onComplete) onComplete();
-    }, (INITIAL_ORANGE_DURATION + BLACK_CIRCLE_REVEAL_DURATION + ANALYTICAL_LOAD_DURATION + SAHIL_HIRVE_EXIT_DURATION) * 1000);
+    }, (INITIAL_ORANGE_DURATION + BLACK_CIRCLE_REVEAL_DURATION + ANALYTICAL_LOAD_DURATION + NAME_INTRO_PAUSE + SAHIL_HIRVE_ZOOM_DURATION) * 1000);
 
     return () => {
       clearTimeout(analyticalTimer);
-      clearTimeout(exitTimer);
+      clearTimeout(nameIntroTimer);
+      clearTimeout(nameZoomTimer);
       clearTimeout(completeTimer);
     };
   }, [onComplete]);
@@ -110,7 +115,7 @@ export default function Loader({ onComplete }) {
       clearInterval(messageInterval);
       counterControls.stop();
     };
-  }, [stage]); // This effect runs *only* when stage becomes "analytical"
+  }, [stage]); 
 
 
   return (
@@ -118,9 +123,6 @@ export default function Loader({ onComplete }) {
       className="loader-container fixed inset-0 z-[100] flex flex-col items-center justify-center 
                  text-white overflow-hidden" // Main container
       style={{ backgroundColor: "rgb(251 146 60)" }} // Starts orange
-      // This exit prop is for the final zoom-out fade
-      exit={{ opacity: 0 }}
-      transition={{ duration: SAHIL_HIRVE_EXIT_DURATION * 0.7, ease: "easeOut" }}
     >
       
       {/* 1. Black Circle Reveal */}
@@ -130,7 +132,7 @@ export default function Loader({ onComplete }) {
           clipPath: "circle(0% at 50% 50%)",
         }}
         animate={{
-          clipPath: stage === "initialOrange" 
+          clipPath: stage === "orange" 
             ? "circle(0% at 50% 50%)" 
             : `circle(${circleRadius}px at 50% 50%)` // Animate to cover screen
         }}
@@ -201,19 +203,19 @@ export default function Loader({ onComplete }) {
 
       {/* 4. Sahil Hirve Exit Animation */}
       <AnimatePresence>
-        {stage === "exitSahilHirve" && (
+        {/* Mount this when stage is nameIntro OR nameZoom */}
+        {(stage === "nameIntro" || stage === "nameZoom") && (
           <motion.h1
             // 4, 5, 6: Size, Font, and Color
             className="text-7xl md:text-8xl font-mato font-extrabold text-transparent 
                        absolute inset-0 flex items-center justify-center"
             initial={{ scale: 1, opacity: 0 }}
-            animate={{ opacity: 1 }}
-            // 7. Exit Animation (Zoom into "S")
-            exit={{ 
-              scale: 50, // Zoom in massively
-              opacity: 0, 
-            }}
-            transition={{ duration: SAHIL_HIRVE_EXIT_DURATION, ease: "easeIn" }}
+            // 7. Animate based on stage
+            animate={ stage === "nameIntro" 
+                ? { scale: 1, opacity: 1 } // Fade in and stay
+                : { scale: 50, opacity: 0 } // Zoom into "S" and fade out
+            }
+            transition={{ duration: SAHIL_HIRVE_ZOOM_DURATION, ease: "easeIn" }}
             style={{ 
               WebkitTextStroke: "2px rgb(251 146 60)", // Orange border
               transformOrigin: "30% 50%" // Set origin to the "S"
