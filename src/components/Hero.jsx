@@ -72,9 +72,6 @@ export default function Hero({ scrollToSection, addToRefs, handleDownload }) {
 >
   SAHIL HIRVE
 </motion.h1>
-  SAHIL HIRVE
-</motion.h1>
-
 
         <motion.p
           className="text-base md:text-lg mt-4 text-gray-300"
