@@ -11,7 +11,7 @@ export default function Hero({ scrollToSection, addToRefs, handleDownload }) {
   // animation below to make this preview work.
   useEffect(() => {
   gsap.to("#hero-bg", {
-    backgroundPositionX: "70%",   // moves background horizontally
+    backgroundPositionX: "120%",   // moves background horizontally
     ease: "none",
     scrollTrigger: {
       trigger: "#home",
