@@ -2,7 +2,7 @@ import Loader from "./components/Loader.jsx";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import React, { useEffect, useRef, useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import Lenis from '@studio-freight/lenis';
@@ -16,6 +16,7 @@ export default function App() {
   const lenisRef = useRef(null);
 
   useEffect(() => {
+    if (!isLoading) {
     lenisRef.current = new Lenis({ duration: 1.2, smooth: true });
 
     const raf = (time) => {
@@ -62,7 +63,8 @@ export default function App() {
       if (lenisRef.current) lenisRef.current.destroy();
       ScrollTrigger.getAll().forEach((st) => st.kill());
     };
-  }, []);
+    }
+  }, [isLoading]);
 
   const handleDownload = () => {
     const link = document.createElement('a');
@@ -83,11 +85,22 @@ export default function App() {
   const addToRefs = (el) => {
     if (el && !sectionsRef.current.includes(el)) sectionsRef.current.push(el);
   };
-if (isLoading) return <Loader onComplete={() => setIsLoading(false)} />;
 
   return (
-    <div className="bg-black text-gray-200 overflow-x-hidden scroll-smooth">
-      
+   <div className="bg-black"> {/* A simple container for everything */}
+
+      {/* 1. Add this AnimatePresence block for the Loader */}
+      <AnimatePresence>
+        {isLoading && <Loader onComplete={() => setIsLoading(false)} />}
+      </AnimatePresence>
+
+      {/* 2. Wrap your entire site in this motion.div */}
+      <motion.div
+        className="text-gray-200 overflow-x-hidden scroll-smooth"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: isLoading ? 0 : 1 }}
+        transition={{ duration: 1.5, ease: 'easeOut' }} // This fades the site in
+      >     
 
       {/* Navbar */}
       <Navbar scrollToSection={scrollToSection} />
@@ -200,6 +213,7 @@ if (isLoading) return <Loader onComplete={() => setIsLoading(false)} />;
       </section>
 
       <footer className="text-center py-6 bg-black text-gray-500 border-t border-gray-800">© 2025 Sahil Hirve | All Rights Reserved</footer>
-    </div>
+    </motion.div> {/* 3. Close the motion.div here */}
+      </div>
   );
 }
