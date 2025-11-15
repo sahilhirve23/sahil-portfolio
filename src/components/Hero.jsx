@@ -109,26 +109,25 @@ export default function Hero({ scrollToSection, addToRefs, handleDownload }) {
           id="hero-title"
           className="text-7xl md:text-8xl font-extrabold text-white relative z-20"
           
-          // --- FIX 1: Corrected hover effect ---
           whileHover={{
             color: "transparent", // Makes fill transparent
             WebkitTextStroke: "2px #ff7a00", // Keeps orange stroke
             scale: 1.05 // Scales up
           }}
-          // Transition is a separate prop, not inside whileHover
           transition={{ type: "spring", stiffness: 400, damping: 15 }}
         >
           SAHIL HIRVE
         </motion.h1>
 
-        {/* --- FIX 2: Translucent Background Box --- */}
-        <div className="bg-black/60 backdrop-blur-sm rounded-md p-3 mt-4 max-w-4xl">
+        {/* --- FIX 1 & 3: Faded Edges, Responsive Width --- */}
+        <div className="bg-black/60 backdrop-blur-sm rounded-lg p-3 mt-4 
+                        max-w-[50%] shadow-lg shadow-black/80">
           <div className="flex flex-row flex-wrap items-center 
                           text-lg md:text-xl text-gray-300 gap-x-2">
             {rolesData.map((role, index) => (
               <Fragment key={role.id}>
-                {/* This will force "Computer Engineer" to a new line */}
-                {role.title === "Computer Engineer" && <div className="w-full h-2"></div>}
+                
+                {/* --- FIX 2: Removed forced line break --- */}
 
                 <motion.span
                   className="cursor-pointer font-semibold" // Made text bold
@@ -145,11 +144,10 @@ export default function Hero({ scrollToSection, addToRefs, handleDownload }) {
                   {role.title}
                 </motion.span>
 
-                {/* Add a separator */}
-                {index < rolesData.length - 1 &&
-                  rolesData[index + 1].title !== "Computer Engineer" && (
-                    <span className="text-gray-500 select-none mx-1">•</span>
-                  )}
+                {/* --- FIX 2: Simplified separator logic --- */}
+                {index < rolesData.length - 1 && (
+                  <span className="text-gray-500 select-none mx-1">•</span>
+                )}
               </Fragment>
             ))}
           </div>
