@@ -2,6 +2,8 @@ import React, { useEffect, useState, Fragment } from "react";
 // Import useState for tracking hover and AnimatePresence for the pop-up
 import { motion, AnimatePresence } from "framer-motion";
 // We will import GSAP dynamically inside useEffect
+// Add this line with your other imports
+import { FaChevronDown } from 'https://esm.sh/react-icons/fa6';
 
 // --- 1. Data for your 5 roles ---
 const rolesData = [
@@ -154,26 +156,40 @@ export default function Hero({ scrollToSection, addToRefs, handleDownload }) {
         </div>
 
         {/* --- FIX 4: Animated Buttons --- */}
-        <div className="flex gap-4 mt-6">
+       
+      </div>
+
+      {/* --- New: Centered Button Container & Scroll Down Component --- */}
+      <div className="absolute inset-x-0 bottom-10 flex flex-col items-center justify-center z-30">
+        
+        {/* 1. New Centered, Styled Buttons */}
+        <div className="flex gap-6 mb-8">
           <motion.button 
-            className="px-5 py-2 bg-orange-600 rounded-lg" // Removed hover: and transition
+            className="px-8 py-3 bg-gradient-to-br from-orange-600 to-orange-700 
+                       rounded-full border border-orange-500 text-lg font-semibold shadow-lg
+                       backdrop-blur-sm"
             onClick={() => window.open(resumeDownloadUrl, '_blank')}
             whileHover={{ 
-              scale: 1.05,
-              backgroundColor: "#ea580c" // This is Tailwind's orange-500
+              scale: 1.07,
+              boxShadow: "0 0 20px rgba(251, 146, 60, 0.7)", // Orange glowing shadow
+              backgroundPosition: "right center" // For subtle gradient shift
             }}
             whileTap={{ scale: 0.95 }}
             transition={{ type: "spring", stiffness: 400, damping: 17 }}
+            style={{ backgroundSize: "200% auto" }} // For gradient shift on hover
           >
             View My Profile
           </motion.button>
           
           <motion.button
             onClick={() => scrollToSection("about")}
-            className="px-5 py-2 bg-gray-800 rounded-lg" // Removed hover: and transition
+            className="px-8 py-3 bg-gray-800/70 rounded-full border border-gray-700 text-lg font-semibold
+                       backdrop-blur-sm"
             whileHover={{ 
-              scale: 1.05,
-              backgroundColor: "#374151" // This is Tailwind's gray-700
+              scale: 1.07,
+              backgroundColor: "rgba(75, 85, 99, 0.8)", // slightly lighter gray
+              borderColor: "rgb(251 146 60)", // Orange border on hover
+              color: "rgb(251 146 60)" // Orange text on hover
             }}
             whileTap={{ scale: 0.95 }}
             transition={{ type: "spring", stiffness: 400, damping: 17 }}
@@ -181,8 +197,52 @@ export default function Hero({ scrollToSection, addToRefs, handleDownload }) {
             Contact Me
           </motion.button>
         </div>
-      </div>
 
+        {/* 2. New Scroll Down Component */}
+        <motion.div
+          className="flex flex-col items-center text-gray-400 cursor-pointer"
+          initial={{ opacity: 0, y: 50 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.5, duration: 0.8 }}
+          onClick={() => scrollToSection("education")} // Scroll to the next section
+        >
+          {/* Shining Text */}
+          <motion.p 
+            className="text-lg font-semibold text-gray-400"
+            style={{
+              backgroundImage: 'linear-gradient(90deg, #555 0%, #AAA 50%, #555 100%)',
+              WebkitBackgroundClip: 'text',
+              WebkitTextFillColor: 'transparent',
+              backgroundSize: '200% auto',
+              backgroundPosition: 'left center',
+            }}
+            animate={{
+              backgroundPosition: ['left center', 'right center'],
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "linear",
+            }}
+          >
+            SCROLL DOWN
+          </motion.p>
+          {/* Bouncing Icon */}
+          <motion.div
+            animate={{
+              y: [0, -10, 0], // Bounce animation
+            }}
+            transition={{
+              duration: 1.5,
+              repeat: Infinity,
+              ease: "easeInOut",
+              repeatDelay: 0.5,
+            }}
+          >
+            <FaChevronDown className="text-3xl text-gray-400" />
+          </motion.div>
+        </motion.div>
+      </div>
       {/* --- Dots and Description Boxes --- */}
       <div className="absolute z-30 right-10 md:right-20 top-1/2 -translate-y-1/2">
         <div className="flex flex-col gap-6">
