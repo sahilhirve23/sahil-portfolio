@@ -104,10 +104,11 @@ export default function Hero({ scrollToSection, addToRefs, handleDownload }) {
 
       {/* LAYER 3: CONTENT (z-20) */}
       <div className="relative z-20 h-full w-full 
-                      flex flex-col justify-center items-start pl-20">
+                      flex flex-col justify-center items-center md:items-start 
+                      text-center md:text-left px-6 md:pl-20">
         <motion.h1
-          id="hero-title"
-          className="text-7xl md:text-8xl font-extrabold text-white relative z-20"
+  id="hero-title"
+  className="text-5xl sm:text-7xl md:text-8xl font-extrabold text-white relative z-20"
           
           whileHover={{
             color: "transparent", // Makes fill transparent
@@ -121,7 +122,7 @@ export default function Hero({ scrollToSection, addToRefs, handleDownload }) {
 
         {/* --- FIX 1 & 3: Faded Edges, Responsive Width --- */}
         <div className="bg-black/60 backdrop-blur-sm rounded-lg p-3 mt-4 
-                        max-w-[50%] shadow-lg shadow-black/80">
+                        max-w-[90%] md:max-w-[50%] shadow-lg shadow-black/80">
           <div className="flex flex-row flex-wrap items-center 
                           text-lg md:text-xl text-gray-300 gap-x-2">
             {rolesData.map((role, index) => (
@@ -158,11 +159,11 @@ export default function Hero({ scrollToSection, addToRefs, handleDownload }) {
       <div className="absolute inset-x-0 bottom-10 flex flex-col items-center justify-center z-30">
         
         {/* 1. New Centered, Styled Buttons */}
-        <div className="flex gap-6 mb-8">
+        <div className="flex flex-col md:flex-row gap-4 md:gap-6 mb-6 md:mb-8">
           <motion.button 
-            className="px-8 py-3 bg-gradient-to-br from-orange-600 to-orange-700 
-                       rounded-full border border-orange-500 text-lg font-semibold shadow-lg
-                       backdrop-blur-sm"
+  className="px-6 py-2 md:px-8 md:py-3 bg-gradient-to-br from-orange-600 to-orange-700 
+             rounded-full border border-orange-500 text-base md:text-lg font-semibold 
+             shadow-lg backdrop-blur-sm"
             onClick={() => window.open(resumeDownloadUrl, '_blank')}
             whileHover={{ 
               scale: 1.07,
@@ -176,10 +177,10 @@ export default function Hero({ scrollToSection, addToRefs, handleDownload }) {
             View My Profile
           </motion.button>
           
-          <motion.button
-            onClick={() => scrollToSection("about")}
-            className="px-8 py-3 bg-gray-800/70 rounded-full border border-gray-700 text-lg font-semibold
-                       backdrop-blur-sm"
+         <motion.button
+  onClick={() => scrollToSection("about")}
+  className="px-6 py-2 md:px-8 md:py-3 bg-gray-800/70 rounded-full border border-gray-700 
+             text-base md:text-lg font-semibold backdrop-blur-sm"
             whileHover={{ 
               scale: 1.07,
               backgroundColor: "rgba(75, 85, 99, 0.8)", // slightly lighter gray
@@ -203,7 +204,7 @@ export default function Hero({ scrollToSection, addToRefs, handleDownload }) {
         >
           {/* Shining Text */}
           <motion.p 
-            className="text-lg font-semibold text-gray-400"
+  className="text-base md:text-lg font-semibold text-gray-400"
             style={{
               backgroundImage: 'linear-gradient(90deg, #555 0%, #AAA 50%, #555 100%)',
               WebkitBackgroundClip: 'text',
@@ -236,7 +237,7 @@ export default function Hero({ scrollToSection, addToRefs, handleDownload }) {
           >
             {/* --- THIS IS THE NEW SVG ICON --- */}
             <svg 
-              className="text-3xl text-gray-400" 
+  className="text-2xl md:text-3xl text-gray-400"
               stroke="currentColor" 
               fill="currentColor" 
               strokeWidth="0" 
@@ -252,7 +253,7 @@ export default function Hero({ scrollToSection, addToRefs, handleDownload }) {
       </div>
       
       {/* --- Dots and Description Boxes --- */}
-      <div className="absolute z-30 right-10 md:right-20 top-1/2 -translate-y-1/2">
+     <div className="absolute z-30 right-4 md:right-20 top-1/2 -translate-y-1/2">
         <div className="flex flex-col gap-6">
           {rolesData.map((role) => (
             // This 'relative' container holds one dot and its description box
@@ -278,9 +279,9 @@ export default function Hero({ scrollToSection, addToRefs, handleDownload }) {
               <AnimatePresence>
                 {hoveredIndex === role.id && (
                   <motion.div
-                    className="absolute right-full top-1/2 -translate-y-1/2 mr-6 
-                               w-64 p-4 bg-black/80 backdrop-blur-lg 
-                               border border-gray-700 rounded-lg shadow-xl"
+  className="absolute right-full top-1/s-1/2 mr-4 md:mr-6 
+             w-56 md:w-64 p-4 bg-black/80 backdrop-blur-lg 
+             border border-gray-700 rounded-lg shadow-xl"
                     style={{ transformOrigin: "right center" }}
                     initial={{ opacity: 0, scale: 0.5, x: 20 }}
                     animate={{ opacity: 1, scale: 1, x: 0 }}
