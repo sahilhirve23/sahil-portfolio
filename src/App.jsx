@@ -17,7 +17,18 @@ export default function App() {
   const lenisRef = useRef(null);
 
   useEffect(() => {
-    if (!isLoading) {
+
+  // 🔒 Prevent scrolling while Loader is active
+  if (isLoading) {
+    document.body.style.overflow = "hidden";
+  } else {
+    document.body.style.overflow = "auto";
+  }
+
+  // ------------------------------
+  // Existing animation setup
+  // ------------------------------
+  if (!isLoading) {
     lenisRef.current = new Lenis({ duration: 1.2, smooth: true });
 
     const raf = (time) => {
@@ -63,9 +74,12 @@ export default function App() {
     return () => {
       if (lenisRef.current) lenisRef.current.destroy();
       ScrollTrigger.getAll().forEach((st) => st.kill());
+      document.body.style.overflow = "auto"; // cleanup
     };
-    }
-  }, [isLoading]);
+  }
+
+}, [isLoading]);
+
 
   const handleDownload = () => {
     const link = document.createElement('a');
