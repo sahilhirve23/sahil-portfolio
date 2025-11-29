@@ -212,11 +212,11 @@ export default function Education({ addToRefs }) {
         </motion.h2>
         
         {/* SPACER: Reduced from 150vh to 110vh to reduce scrolling distance */}
-        <div ref={scrollTriggerRef} className="h-[110vh] w-full pointer-events-none" />
+        <div ref={scrollTriggerRef} className="h-[60vh] w-full pointer-events-none" />
 
         {/* Timeline Container */}
         {/* Reduced margin-top from mt-64 to mt-24 to bring cards closer to title */}
-        <div ref={timelineRef} className="relative w-full max-w-5xl mx-auto mt-24 pb-24">
+        <div ref={timelineRef} className="relative w-full max-w-5xl mx-auto mt-10 pb-24">
           
           {/* Central Line */}
           <motion.div
