@@ -82,28 +82,46 @@ function TimelineItem({ item, side, onHover, onLeave }) {
       initial={{ opacity: 0, x: isLeft ? -50 : 50 }}
       whileInView={{ opacity: 1, x: 0 }}
       viewport={{ once: true, amount: 0.2 }}
-      transition={{ duration: 0.6, ease: "easeOut" }}
+      transition={{ duration: 1.0, ease: "easeOut" }}
       onMouseEnter={onHover}
       onMouseLeave={onLeave}
     >
       <motion.div
         className="bg-gray-900/80 p-6 rounded-lg border border-gray-700 backdrop-blur-md shadow-lg h-full flex flex-col justify-center"
-        whileHover={{
-          scale: 1.03,
-          borderColor: "rgb(251 146 60)",
-          boxShadow: "0px 0px 15px rgba(251, 146, 60, 0.3)"
+        initial="initial"
+        whileHover="hover"
+        variants={{
+          initial: { scale: 1, borderColor: "rgb(55 65 81)", boxShadow: "0px 10px 15px -3px rgba(0, 0, 0, 0.1)" },
+          hover: {
+            scale: 1.05,
+            borderColor: "rgb(251 146 60)",
+            boxShadow: "0px 0px 25px rgba(251, 146, 60, 0.4)",
+            transition: { duration: 0.3, ease: "easeInOut" }
+          }
         }}
       >
-        <span className={`text-sm font-semibold ${type === 'Education' ? 'text-cyan-400' : 'text-purple-400'}`}>
-          {type.toUpperCase()}
-        </span>
-        <p className="text-sm text-gray-400 mb-1">{date}</p>
-        <h3 className="text-xl text-white font-semibold mb-1">{title}</h3>
-        <h4 className="text-md text-gray-300 mb-4">{subtitle}</h4>
+        {/* Wrapper for Text to handle scaling and glowing independently */}
+        <motion.div
+          variants={{
+            initial: { scale: 1, textShadow: "0px 0px 0px rgba(0,0,0,0)" },
+            hover: { 
+              scale: 1.02,
+              textShadow: "0px 0px 8px rgba(255,255,255,0.5)",
+              transition: { duration: 0.3 }
+            }
+          }}
+        >
+          <span className={`text-sm font-semibold ${type === 'Education' ? 'text-cyan-400' : 'text-purple-400'}`}>
+            {type.toUpperCase()}
+          </span>
+          <p className="text-sm text-gray-400 mb-1">{date}</p>
+          <h3 className="text-xl text-white font-semibold mb-1">{title}</h3>
+          <h4 className="text-md text-gray-300 mb-4">{subtitle}</h4>
 
-        <ul className="space-y-2 list-disc list-inside text-gray-400 text-sm">
-          {points.map((p, i) => <li key={i}>{p}</li>)}
-        </ul>
+          <ul className="space-y-2 list-disc list-inside text-gray-400 text-sm">
+            {points.map((p, i) => <li key={i}>{p}</li>)}
+          </ul>
+        </motion.div>
 
         <div className={`flex flex-wrap gap-2 mt-4 ${isLeft ? 'justify-start' : 'justify-end'}`}>
           {skills.map((skill, i) => (
@@ -133,8 +151,18 @@ export default function Education({ addToRefs }) {
     target: sectionRef,
     offset: ["start end", "end start"],
   });
+  
+  // Parallax direction: Left to Right
+  const bgPosX = useTransform(bgProgress, [0, 1], ["100%", "0%"]);
 
-  const bgPosX = useTransform(bgProgress, [0, 1], ["0%", "100%"]);
+  // Scroll Progress for the Line
+  const { scrollYProgress: lineProgress } = useScroll({
+    target: timelineRef,
+    offset: ["start center", "end center"],
+  });
+   
+  // Map scroll progress 0-1 to scale 0-1
+  const scaleY = useTransform(lineProgress, [0, 1], [0, 1]);
 
   return (
     <section
@@ -159,14 +187,26 @@ export default function Education({ addToRefs }) {
       </div>
 
       {/* STATIC CENTERED TITLE */}
-      <h2 className="text-4xl md:text-5xl font-extrabold text-orange-500 text-center mb-16 mt-24">
+      <motion.h2
+        className="text-4xl md:text-5xl font-extrabold text-orange-500 text-center mb-16 mt-24 cursor-pointer"
+        whileHover={{ scale: 1.1, color: "#ffffff" }}
+        transition={{ duration: 0.3 }}
+      >
         Education & Experience
-      </h2>
+      </motion.h2>
 
       {/* TIMELINE */}
       <div ref={timelineRef} className="relative w-full max-w-5xl mx-auto pb-24">
+        
+        {/* Vertical Line Animation */}
+        
+        {/* 1. The Track (Static Grey Line behind) */}
+        <div className="absolute top-4 bottom-4 left-1/2 -translate-x-1/2 w-1 bg-gray-800 hidden md:block rounded-full" />
+        
+        {/* 2. The Fill (Animated Orange Line) */}
         <motion.div
-          className="absolute top-4 bottom-4 left-1/2 -translate-x-1/2 w-1 bg-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.6)] hidden md:block"
+          style={{ scaleY: scaleY }} 
+          className="absolute top-4 bottom-4 left-1/2 -translate-x-1/2 w-1 bg-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.6)] hidden md:block origin-top rounded-full"
         />
 
         <div className="relative flex flex-col gap-y-8 md:gap-y-12">
