@@ -342,11 +342,15 @@ const StatusBadge = ({ status }) => {
 
 const DetailPanel = ({ item, onClose }) => {
   
-  // Disable body scroll when panel is open
+  // Disable body scroll when panel is open to prevent main page scrolling
   useEffect(() => {
+    // Save original overflow style
+    const originalStyle = window.getComputedStyle(document.body).overflow;
     document.body.style.overflow = 'hidden';
+    
+    // Cleanup on unmount (when panel closes)
     return () => {
-      document.body.style.overflow = 'unset';
+      document.body.style.overflow = originalStyle;
     };
   }, []);
 
@@ -382,7 +386,7 @@ const DetailPanel = ({ item, onClose }) => {
         </div>
       </div>
 
-      {/* Panel Content - Scrollable */}
+      {/* Panel Content - Scrollable with containment */}
       <div 
         className="flex-grow overflow-y-auto p-6 md:p-8 scrollbar-thin scrollbar-thumb-gray-800 scrollbar-track-transparent overscroll-contain"
         data-lenis-prevent="true"
