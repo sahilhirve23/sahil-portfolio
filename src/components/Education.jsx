@@ -44,7 +44,7 @@ const timelineData = [
     bgImage: "https://lh3.googleusercontent.com/proxy/5kNSx9Sqtnh3fTB2cT1moQH4KoQXA4sB_7kV3f2UeQ4wCB7ZgzRROoyB_C2tXDUwcoB5DGfVRxx8-qhKzlE7qBYnJALrMa8"
   },
   {
-    id: 1, 
+    id: 1,
     type: 'Experience',
     date: '2024 - Present',
     isDual: true,
@@ -74,7 +74,6 @@ const timelineData = [
 function TimelineItem({ item, side, onHover, onLeave }) {
   const { type, date, title, subtitle, points, skills } = item;
   const isLeft = side === 'left';
-  const alignment = 'text-left';
   const cardLayout = isLeft ? 'md:mr-auto' : 'md:ml-auto';
 
   return (
@@ -134,22 +133,14 @@ export default function Education({ addToRefs }) {
     target: sectionRef,
     offset: ["start end", "end start"],
   });
+
   const bgPosX = useTransform(bgProgress, [0, 1], ["0%", "100%"]);
-
-  // New Title Animation (hero → normal)
-  const { scrollYProgress: titleProgress } = useScroll({
-    target: sectionRef,
-    offset: ["start start", "end start"],
-  });
-
-  const titleY = useTransform(titleProgress, [0, 0.2], ["40vh", "0vh"]);
-  const titleScale = useTransform(titleProgress, [0, 0.2], [1.8, 1]);
 
   return (
     <section
       id="education"
       ref={sectionRef}
-      className="relative min-h-screen flex flex-col justify-start px-4 md:px-10 py-0"
+      className="relative min-h-screen flex flex-col px-4 md:px-10 py-0"
     >
       {/* Background */}
       <div className="absolute inset-0 overflow-hidden -z-10">
@@ -167,20 +158,13 @@ export default function Education({ addToRefs }) {
         </motion.div>
       </div>
 
-      {/* Title */}
-      <motion.h2
-        className="text-4xl md:text-5xl font-extrabold text-orange-500 text-center mb-16"
-        style={{
-          y: titleY,
-          scale: titleScale,
-        }}
-      >
+      {/* STATIC CENTERED TITLE */}
+      <h2 className="text-4xl md:text-5xl font-extrabold text-orange-500 text-center mb-16 mt-24">
         Education & Experience
-      </motion.h2>
+      </h2>
 
-      {/* Timeline */}
-      <div ref={timelineRef} className="relative w-full max-w-5xl mx-auto pt-40 pb-24">
-
+      {/* TIMELINE */}
+      <div ref={timelineRef} className="relative w-full max-w-5xl mx-auto pb-24">
         <motion.div
           className="absolute top-4 bottom-4 left-1/2 -translate-x-1/2 w-1 bg-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.6)] hidden md:block"
         />
@@ -189,7 +173,7 @@ export default function Education({ addToRefs }) {
           {timelineData.map((item, index) => (
             <div key={item.id} className="relative z-10">
               <div
-                className="absolute top-4 left-1/2 -translate-x-1/2 w-6 h-6 rounded-full bg-gray-900 
+                className="absolute top-4 left-1/2 -translate-x-1/2 w-6 h-6 rounded-full bg-gray-900
                 border-4 border-orange-500 shadow-[0_0_20px_rgba(249,115,22,1)] hidden md:block"
               />
 
