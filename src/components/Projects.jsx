@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { createPortal } from 'react-dom'; // Import Portal for full-screen panel
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { 
   Cpu, 
@@ -357,7 +358,7 @@ const DetailPanel = ({ item, onClose }) => {
       animate={{ x: 0 }}
       exit={{ x: "100%" }}
       transition={{ type: "spring", stiffness: 300, damping: 30 }}
-      className="fixed inset-y-0 right-0 w-full md:w-[600px] bg-[#050505] border-l border-orange-900/50 shadow-[0_0_50px_rgba(0,0,0,0.8)] z-50 flex flex-col"
+      className="fixed inset-y-0 right-0 w-full md:w-[600px] bg-[#050505] border-l border-orange-900/50 shadow-[0_0_50px_rgba(0,0,0,0.8)] z-[9999] flex flex-col"
     >
       {/* Panel Header - Fixed */}
       <div className="p-6 md:p-8 border-b border-gray-800 bg-[#050505] relative z-10">
@@ -578,8 +579,14 @@ const Projects = ({ addToRefs }) => {
   
   // Parallax Logic - Zoom Effect
   const { scrollY } = useScroll();
-  const backgroundScale = useTransform(scrollY, [0, 1000], [1, 1.2]); // Zoom in from 1 to 1.2
+  const backgroundScale = useTransform(scrollY, [0, 1000], [1, 1.5]); // Zoom in from 1 to 1.5
   const backgroundOpacity = useTransform(scrollY, [0, 1000], [1, 0.5]); // Optional: Fade out slightly
+
+  // Portal target check
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
 
   return (
     <section 
@@ -590,8 +597,8 @@ const Projects = ({ addToRefs }) => {
     >
       {/* Parallax Background - Fixed to viewport with scale transform */}
       <motion.div 
-        className="fixed inset-0 z-0 w-full h-full" 
-        style={{ scale: backgroundScale, opacity: backgroundOpacity }}
+        className="fixed inset-0 z-0 w-full h-full pointer-events-none" 
+        style={{ scale: backgroundScale, opacity: backgroundOpacity, zIndex: 0 }}
       >
          <div 
             className="w-full h-full bg-cover bg-center"
@@ -603,7 +610,7 @@ const Projects = ({ addToRefs }) => {
       </motion.div>
 
       {/* Dark Overlay - Fixed to viewport */}
-      <div className="fixed inset-0 z-0 bg-[#050505]/70 backdrop-blur-[2px]" />
+      <div className="fixed inset-0 z-0 bg-[#050505]/70 backdrop-blur-[2px] pointer-events-none" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-12 md:px-10 md:py-16">
         
@@ -705,26 +712,29 @@ const Projects = ({ addToRefs }) => {
         {/* Footer content removed as requested */}
       </footer>
 
-      {/* Detail Panel Overlay (Modal) */}
-      <AnimatePresence>
-        {selectedItem && (
-          <>
-            {/* Backdrop */}
-            <motion.div 
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              exit={{ opacity: 0 }}
-              onClick={() => setSelectedItem(null)}
-              className="fixed inset-0 bg-black/60 backdrop-blur-sm z-40"
-            />
-            {/* Panel */}
-            <DetailPanel 
-              item={selectedItem} 
-              onClose={() => setSelectedItem(null)} 
-            />
-          </>
-        )}
-      </AnimatePresence>
+      {/* Detail Panel Overlay (Modal) - Teleported to Body */}
+      {mounted && createPortal(
+        <AnimatePresence>
+          {selectedItem && (
+            <>
+              {/* Backdrop */}
+              <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                onClick={() => setSelectedItem(null)}
+                className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9998]"
+              />
+              {/* Panel */}
+              <DetailPanel 
+                item={selectedItem} 
+                onClose={() => setSelectedItem(null)} 
+              />
+            </>
+          )}
+        </AnimatePresence>,
+        document.body
+      )}
 
     </section>
   );
