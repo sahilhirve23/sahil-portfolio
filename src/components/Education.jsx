@@ -179,7 +179,8 @@ export default function Education({ addToRefs }) {
       </motion.h2>
 
       {/* Timeline */}
-      <div ref={timelineRef} className="relative w-full max-w-5xl mx-auto pb-24">
+      <div ref={timelineRef} className="relative w-full max-w-5xl mx-auto pt-40 pb-24">
+
         <motion.div
           className="absolute top-4 bottom-4 left-1/2 -translate-x-1/2 w-1 bg-orange-500 shadow-[0_0_15px_rgba(249,115,22,0.6)] hidden md:block"
         />
