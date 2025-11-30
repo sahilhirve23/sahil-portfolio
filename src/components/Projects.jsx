@@ -341,8 +341,8 @@ const StatusBadge = ({ status }) => {
 };
 
 const DetailPanel = ({ item, onClose }) => {
-  // Lock body scroll logic is kept as fallback, 
-  // but data-lenis-prevent handles the main issue.
+  
+  // Disable body scroll when panel is open
   useEffect(() => {
     document.body.style.overflow = 'hidden';
     return () => {
@@ -358,7 +358,7 @@ const DetailPanel = ({ item, onClose }) => {
       transition={{ type: "spring", stiffness: 300, damping: 30 }}
       className="fixed inset-y-0 right-0 w-full md:w-[600px] bg-[#050505] border-l border-orange-900/50 shadow-[0_0_50px_rgba(0,0,0,0.8)] z-[9999] flex flex-col"
     >
-      {/* Panel Header */}
+      {/* Panel Header - Fixed */}
       <div className="p-6 md:p-8 border-b border-gray-800 bg-[#050505] relative z-10">
         <div className="flex justify-between items-start">
           <div>
@@ -382,7 +382,7 @@ const DetailPanel = ({ item, onClose }) => {
         </div>
       </div>
 
-      {/* Panel Content - Scrollable with Lenis prevention and Overscroll containment */}
+      {/* Panel Content - Scrollable */}
       <div 
         className="flex-grow overflow-y-auto p-6 md:p-8 scrollbar-thin scrollbar-thumb-gray-800 scrollbar-track-transparent overscroll-contain"
         data-lenis-prevent="true"
@@ -594,27 +594,26 @@ const Projects = ({ addToRefs }) => {
       ref={addToRefs} 
       className="min-h-screen relative overflow-x-hidden"
     >
-      {/* Background Strategy for "No White Flash":
-        1. Base black layer (-z-20) ensures 100% opacity darkness behind everything.
-        2. Image layer (-z-10) scales on top of black. No opacity fade, so it stays solid.
-      */}
-      <div className="fixed inset-0 w-full h-full bg-[#050505] -z-20" /> 
+      {/* Background Layers */}
+      {/* 1. Base Black: Prevents white flash */}
+      <div className="fixed inset-0 w-full h-full bg-[#050505] -z-50" /> 
       
+      {/* 2. Parallax Image: Scales on top of black */}
       <motion.div 
-        className="fixed inset-0 w-full h-full -z-10 pointer-events-none" 
+        className="fixed inset-0 w-full h-full -z-40 pointer-events-none" 
         style={{ scale: backgroundScale }}
       >
          <div 
-            className="w-full h-full bg-cover bg-center"
+            className="w-full h-full bg-cover bg-center opacity-40"
             style={{ 
               backgroundImage: "url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop')",
-              filter: "brightness(0.25)"
+              filter: "brightness(0.5)" // Darkened for better text contrast
             }}
          />
       </motion.div>
 
-      {/* Dark Overlay - Fixed to viewport */}
-      <div className="fixed inset-0 z-0 bg-[#050505]/70 backdrop-blur-[2px] pointer-events-none" />
+      {/* 3. Dark Overlay: Ensures content readability */}
+      <div className="fixed inset-0 z-[-30] bg-[#050505]/70 backdrop-blur-[2px] pointer-events-none" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-12 md:px-10 md:py-16">
         
