@@ -582,9 +582,9 @@ const StatsBar = ({ count }) => {
 const Projects = ({ addToRefs }) => {
   const [selectedItem, setSelectedItem] = useState(null);
   
-  // Parallax Logic - Zoom Effect
+  // Parallax Logic - Horizontal Scroll
   const { scrollY } = useScroll();
-  const backgroundScale = useTransform(scrollY, [0, 1000], [1, 1.5]); 
+  const backgroundX = useTransform(scrollY, [0, 1000], ["0%", "-10%"]); 
 
   // Portal target check
   const [mounted, setMounted] = useState(false);
@@ -604,13 +604,13 @@ const Projects = ({ addToRefs }) => {
       
       {/* 2. Parallax Image: Scales on top of black */}
       <motion.div 
-        className="fixed inset-0 w-full h-full -z-40 pointer-events-none" 
-        style={{ scale: backgroundScale }}
+        className="fixed inset-0 w-[120%] h-full -z-40 pointer-events-none" 
+        style={{ x: backgroundX }}
       >
          <div 
             className="w-full h-full bg-cover bg-center opacity-40"
             style={{ 
-              backgroundImage: "url('https://images.unsplash.com/photo-1551288049-bebda4e38f71?q=80&w=2070&auto=format&fit=crop')",
+              backgroundImage: "url('https://img.freepik.com/premium-vector/orange-black-background-with-circle-word-technology-it_42077-16464.jpg')",
               filter: "brightness(0.5)" // Darkened for better text contrast
             }}
          />
