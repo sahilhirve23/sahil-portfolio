@@ -573,7 +573,7 @@ const StatsBar = ({ count }) => {
   );
 };
 
-const App = ({ addToRefs }) => {
+const Projects = ({ addToRefs }) => {
   const [selectedItem, setSelectedItem] = useState(null);
   
   // Parallax Logic - Zoom Effect
@@ -730,4 +730,4 @@ const App = ({ addToRefs }) => {
   );
 };
 
-export default App;
+export default Projects;
