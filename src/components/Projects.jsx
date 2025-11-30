@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { createPortal } from 'react-dom'; // Import Portal for full-screen panel
+import { createPortal } from 'react-dom';
 import { motion, AnimatePresence, useScroll, useTransform } from 'framer-motion';
 import { 
   Cpu, 
@@ -20,7 +20,6 @@ import {
 
 // --- Animation Variants ---
 
-// Simple Smooth Scale Up Animation (1 second duration)
 const simpleScaleVariants = {
   hidden: { 
     opacity: 0, 
@@ -31,8 +30,8 @@ const simpleScaleVariants = {
     scale: 1,
     transition: {
       duration: 1,
-      delay: i * 0.15, // Slight stagger for visual flow
-      ease: [0.25, 0.4, 0.25, 1] // Smooth cubic-bezier ease
+      delay: i * 0.15,
+      ease: [0.25, 0.4, 0.25, 1]
     }
   })
 };
@@ -45,7 +44,6 @@ const TypewriterBlock = ({ text, delay = 0, speed = 5, onComplete }) => {
   const indexRef = useRef(0);
 
   useEffect(() => {
-    // Reset if text changes
     setDisplayedText('');
     indexRef.current = 0;
     setIsComplete(false);
@@ -343,8 +341,8 @@ const StatusBadge = ({ status }) => {
 };
 
 const DetailPanel = ({ item, onClose }) => {
-  
-  // Disable body scroll when panel is open
+  // Lock body scroll logic is kept as fallback, 
+  // but data-lenis-prevent handles the main issue.
   useEffect(() => {
     document.body.style.overflow = 'hidden';
     return () => {
@@ -360,7 +358,7 @@ const DetailPanel = ({ item, onClose }) => {
       transition={{ type: "spring", stiffness: 300, damping: 30 }}
       className="fixed inset-y-0 right-0 w-full md:w-[600px] bg-[#050505] border-l border-orange-900/50 shadow-[0_0_50px_rgba(0,0,0,0.8)] z-[9999] flex flex-col"
     >
-      {/* Panel Header - Fixed */}
+      {/* Panel Header */}
       <div className="p-6 md:p-8 border-b border-gray-800 bg-[#050505] relative z-10">
         <div className="flex justify-between items-start">
           <div>
@@ -384,8 +382,11 @@ const DetailPanel = ({ item, onClose }) => {
         </div>
       </div>
 
-      {/* Panel Content - Scrollable */}
-      <div className="flex-grow overflow-y-auto p-6 md:p-8 scrollbar-thin scrollbar-thumb-gray-800 scrollbar-track-transparent">
+      {/* Panel Content - Scrollable with Lenis prevention and Overscroll containment */}
+      <div 
+        className="flex-grow overflow-y-auto p-6 md:p-8 scrollbar-thin scrollbar-thumb-gray-800 scrollbar-track-transparent overscroll-contain"
+        data-lenis-prevent="true"
+      >
         <div className="space-y-8 pb-12">
           
           {/* Status Block */}
@@ -408,8 +409,8 @@ const DetailPanel = ({ item, onClose }) => {
                 <div className="pl-4 border-l border-gray-800">
                   <TypewriterBlock 
                     text={section.content} 
-                    speed={5} // Fast typing for better UX
-                    delay={idx * 300} // Staggered start
+                    speed={5} 
+                    delay={idx * 300} 
                   />
                 </div>
               </div>
@@ -436,7 +437,7 @@ const DetailPanel = ({ item, onClose }) => {
         </div>
       </div>
 
-      {/* Footer - Fixed */}
+      {/* Footer */}
       <div className="p-4 border-t border-gray-800 bg-[#050505] text-[10px] text-gray-600 font-mono text-center flex justify-between px-8">
          <span>LOG_ID: {Math.random().toString(36).substr(2, 9).toUpperCase()}</span>
          <span>SESSION: ACTIVE</span>
@@ -579,8 +580,7 @@ const Projects = ({ addToRefs }) => {
   
   // Parallax Logic - Zoom Effect
   const { scrollY } = useScroll();
-  const backgroundScale = useTransform(scrollY, [0, 1000], [1, 1.5]); // Zoom in from 1 to 1.5
-  const backgroundOpacity = useTransform(scrollY, [0, 1000], [1, 0.5]); // Optional: Fade out slightly
+  const backgroundScale = useTransform(scrollY, [0, 1000], [1, 1.5]); 
 
   // Portal target check
   const [mounted, setMounted] = useState(false);
@@ -592,13 +592,17 @@ const Projects = ({ addToRefs }) => {
     <section 
       id="projects" 
       ref={addToRefs} 
-      // Added bg-[#050505] here to ensure background is always dark, preventing white flashes/bleed.
-      className="min-h-screen relative bg-[#050505] overflow-x-hidden"
+      className="min-h-screen relative overflow-x-hidden"
     >
-      {/* Parallax Background - Fixed to viewport with scale transform */}
+      {/* Background Strategy for "No White Flash":
+        1. Base black layer (-z-20) ensures 100% opacity darkness behind everything.
+        2. Image layer (-z-10) scales on top of black. No opacity fade, so it stays solid.
+      */}
+      <div className="fixed inset-0 w-full h-full bg-[#050505] -z-20" /> 
+      
       <motion.div 
-        className="fixed inset-0 z-0 w-full h-full pointer-events-none" 
-        style={{ scale: backgroundScale, opacity: backgroundOpacity, zIndex: 0 }}
+        className="fixed inset-0 w-full h-full -z-10 pointer-events-none" 
+        style={{ scale: backgroundScale }}
       >
          <div 
             className="w-full h-full bg-cover bg-center"
