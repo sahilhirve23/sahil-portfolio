@@ -342,6 +342,7 @@ const StatusBadge = ({ status }) => {
 
 const DetailPanel = ({ item, onClose }) => {
   
+  // Disable body scroll when panel is open
   useEffect(() => {
     const originalStyle = window.getComputedStyle(document.body).overflow;
     document.body.style.overflow = 'hidden';
@@ -358,7 +359,7 @@ const DetailPanel = ({ item, onClose }) => {
       transition={{ type: "spring", stiffness: 300, damping: 30 }}
       className="fixed inset-y-0 right-0 w-full md:w-[600px] bg-[#050505] border-l border-orange-900/50 shadow-[0_0_50px_rgba(0,0,0,0.8)] z-[9999] flex flex-col"
     >
-      {/* Panel Header - Fixed */}
+      {/* Panel Header */}
       <div className="p-6 md:p-8 border-b border-gray-800 bg-[#050505] relative z-10">
         <div className="flex justify-between items-start">
           <div>
@@ -382,12 +383,13 @@ const DetailPanel = ({ item, onClose }) => {
         </div>
       </div>
 
-      {/* Panel Content */}
+      {/* Panel Content - data-lenis-prevent is CRITICAL here */}
       <div 
         className="flex-grow overflow-y-auto p-6 md:p-8 scrollbar-thin scrollbar-thumb-gray-800 scrollbar-track-transparent overscroll-contain"
         data-lenis-prevent="true"
       >
         <div className="space-y-8 pb-12">
+          
           <div className="bg-gray-900/30 p-4 rounded border border-gray-800/50 flex flex-wrap gap-4 items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="text-xs text-gray-500 font-mono">CURRENT STATUS:</div>
@@ -429,6 +431,7 @@ const DetailPanel = ({ item, onClose }) => {
               </div>
             </div>
           )}
+
         </div>
       </div>
 
@@ -452,11 +455,13 @@ const ProjectCard = ({ project, index, onSelect }) => {
       onClick={() => onSelect(project)}
       className="bg-gray-900 p-6 rounded-lg border border-gray-700 hover:border-orange-400 transition-all duration-300 transform hover:scale-[1.02] cursor-pointer group flex flex-col h-full relative overflow-hidden"
     >
+      {/* Click Hint Overlay */}
       <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20 flex items-center gap-1 text-[10px] text-orange-400 font-mono bg-black/80 px-2 py-1 rounded border border-orange-500/30">
         <span className="animate-pulse">View Log</span>
         <Maximize2 className="w-3 h-3" />
       </div>
 
+      {/* Header */}
       <div className="flex justify-between items-start mb-4">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-gray-800 rounded-md border border-gray-700 group-hover:bg-gray-800/80 transition-colors">
@@ -470,7 +475,9 @@ const ProjectCard = ({ project, index, onSelect }) => {
         <StatusBadge status={project.status} />
       </div>
 
+      {/* Body */}
       <div className="flex-grow flex flex-col gap-4">
+        {/* Type & Stack */}
         <div className="space-y-2">
           <div className="text-xs text-orange-500 font-mono flex items-center gap-1">
             <Terminal className="w-3 h-3" />
@@ -481,10 +488,12 @@ const ProjectCard = ({ project, index, onSelect }) => {
           </div>
         </div>
 
+        {/* Description */}
         <p className="text-sm text-gray-400 leading-relaxed line-clamp-3 group-hover:text-gray-300 transition-colors">
           {project.desc}
         </p>
 
+        {/* Metrics Grid */}
         <div className="mt-auto grid grid-cols-2 gap-2 pt-2 border-t border-gray-800/50">
           {project.stats.map((stat, idx) => (
             <div key={idx} className="bg-[#0a0a0a]/50 p-2 border border-gray-800 rounded group-hover:border-orange-500/20 transition-colors">
@@ -495,6 +504,7 @@ const ProjectCard = ({ project, index, onSelect }) => {
         </div>
       </div>
       
+      {/* Click To Know More Footer */}
       <div className="mt-4 pt-3 border-t border-gray-800 flex justify-end items-center gap-1 text-xs text-orange-500/70 group-hover:text-orange-400 font-mono opacity-0 group-hover:opacity-100 transition-all transform translate-y-2 group-hover:translate-y-0">
         <span>Initialize Log</span>
         <ChevronRight className="w-3 h-3" />
@@ -514,6 +524,7 @@ const ResearchLog = ({ item, index, onSelect }) => {
       onClick={() => onSelect(item)}
       className="bg-gray-900 p-6 rounded-lg border border-gray-700 hover:border-orange-400 transition transform hover:scale-[1.01] group relative cursor-pointer"
     >
+       {/* Click Hint Overlay */}
        <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20 flex items-center gap-1 text-[10px] text-orange-400 font-mono bg-black/80 px-2 py-1 rounded border border-orange-500/30">
         <span className="animate-pulse">View Abstract</span>
         <Maximize2 className="w-3 h-3" />
@@ -563,28 +574,45 @@ const StatsBar = ({ count }) => {
 
 const Projects = ({ addToRefs }) => {
   const [selectedItem, setSelectedItem] = useState(null);
-  
-  // Logic: Horizontal Scroll from Right to Left (0% -> -25%)
-  const { scrollY } = useScroll();
-  const backgroundX = useTransform(scrollY, [0, 1500], ["0%", "-25%"]); 
+  const sectionRef = useRef(null); // We need a ref to the section for scroll progress
+
+  // Parallax Logic - Horizontal Scroll from Right to Left (0% -> -25%)
+  // We track the scroll progress of the section itself.
+  const { scrollYProgress } = useScroll({
+    target: sectionRef,
+    offset: ["start end", "end start"] // Triggers as section enters viewport until it leaves
+  });
+
+  // Map the scroll progress (0 to 1) to x-axis translation
+  const backgroundX = useTransform(scrollYProgress, [0, 1], ["0%", "-25%"]); 
 
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
     setMounted(true);
   }, []);
 
+  // Safely handle addToRefs if it's undefined
+  const handleRef = (el) => {
+    if (el) {
+        sectionRef.current = el;
+        if (typeof addToRefs === 'function') {
+            addToRefs(el);
+        }
+    }
+  };
+
   return (
     <section 
       id="projects" 
-      ref={addToRefs} 
-      className="min-h-screen relative overflow-x-hidden"
+      ref={handleRef}
+      className="min-h-screen relative overflow-hidden" 
     >
       {/* Background Layers */}
-      <div className="fixed inset-0 w-full h-full bg-[#050505] -z-50" /> 
+      <div className="absolute inset-0 w-full h-full bg-[#050505] -z-50" /> 
       
       {/* Scroll Effect: Move Right to Left using X transform */}
       <motion.div 
-        className="fixed inset-0 w-[130%] h-full -z-40 pointer-events-none" 
+        className="absolute inset-y-0 left-0 w-[130%] h-full -z-40 pointer-events-none" 
         style={{ x: backgroundX }}
       >
          <div 
@@ -596,7 +624,7 @@ const Projects = ({ addToRefs }) => {
          />
       </motion.div>
 
-      <div className="fixed inset-0 z-[-30] bg-[#050505]/70 backdrop-blur-[2px] pointer-events-none" />
+      <div className="absolute inset-0 z-[-30] bg-[#050505]/70 backdrop-blur-[2px] pointer-events-none" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-12 md:px-10 md:py-16">
         
