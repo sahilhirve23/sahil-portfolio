@@ -581,9 +581,14 @@ const StatsBar = ({ count }) => {
 
 const Projects = ({ addToRefs }) => {
   const [selectedItem, setSelectedItem] = useState(null);
+  const wrapperRef = useRef(null);
+
   
-  // Parallax Logic - Horizontal Scroll
-  const { scrollY } = useScroll();
+  // Parallax Logic - Horizontal Scroll (Lenis Scroll Container)
+const { scrollY } = useScroll({
+  container: wrapperRef
+});
+
   const backgroundX = useTransform(scrollY, [0, 1000], ["0%", "-10%"]); 
 
   // Portal target check
@@ -593,20 +598,25 @@ const Projects = ({ addToRefs }) => {
   }, []);
 
   return (
-    <section 
-      id="projects" 
-      ref={addToRefs} 
-      className="min-h-screen relative overflow-x-hidden"
-    >
+   <section
+  id="projects"
+  ref={(el) => {
+    addToRefs(el);          // your existing logic
+    wrapperRef.current = el; // <-- connects Lenis scroll container
+  }}
+  className="min-h-screen relative overflow-x-hidden"
+>
+
       {/* Background Layers */}
       {/* 1. Base Black: Prevents white flash */}
       <div className="fixed inset-0 w-full h-full bg-[#050505] -z-50" /> 
       
       {/* 2. Parallax Image: Scales on top of black */}
       <motion.div 
-        className="fixed inset-0 w-[120%] h-full -z-40 pointer-events-none" 
-        style={{ x: backgroundX }}
-      >
+  className="absolute inset-0 w-[120%] h-full -z-40 pointer-events-none" 
+  style={{ x: backgroundX }}
+>
+
          <div 
             className="w-full h-full bg-cover bg-center opacity-40"
             style={{ 
