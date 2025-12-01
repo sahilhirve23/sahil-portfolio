@@ -342,13 +342,9 @@ const StatusBadge = ({ status }) => {
 
 const DetailPanel = ({ item, onClose }) => {
   
-  // Disable body scroll when panel is open to prevent main page scrolling
   useEffect(() => {
-    // Save original overflow style
     const originalStyle = window.getComputedStyle(document.body).overflow;
     document.body.style.overflow = 'hidden';
-    
-    // Cleanup on unmount (when panel closes)
     return () => {
       document.body.style.overflow = originalStyle;
     };
@@ -386,14 +382,12 @@ const DetailPanel = ({ item, onClose }) => {
         </div>
       </div>
 
-      {/* Panel Content - Scrollable with containment */}
+      {/* Panel Content */}
       <div 
         className="flex-grow overflow-y-auto p-6 md:p-8 scrollbar-thin scrollbar-thumb-gray-800 scrollbar-track-transparent overscroll-contain"
         data-lenis-prevent="true"
       >
         <div className="space-y-8 pb-12">
-          
-          {/* Status Block */}
           <div className="bg-gray-900/30 p-4 rounded border border-gray-800/50 flex flex-wrap gap-4 items-center justify-between">
             <div className="flex items-center gap-4">
               <div className="text-xs text-gray-500 font-mono">CURRENT STATUS:</div>
@@ -402,7 +396,6 @@ const DetailPanel = ({ item, onClose }) => {
             <div className="text-xs text-gray-500 font-mono">ID: {item.id}</div>
           </div>
 
-          {/* Typewriter Logs */}
           <div className="space-y-8">
             {item.logSections && item.logSections.map((section, idx) => (
               <div key={idx}>
@@ -421,7 +414,6 @@ const DetailPanel = ({ item, onClose }) => {
             ))}
           </div>
 
-          {/* Metrics for Projects */}
           {item.stats && (
             <div className="pt-6 border-t border-gray-800/50">
               <h3 className="text-xs font-mono text-orange-500 mb-4">
@@ -437,11 +429,9 @@ const DetailPanel = ({ item, onClose }) => {
               </div>
             </div>
           )}
-
         </div>
       </div>
 
-      {/* Footer */}
       <div className="p-4 border-t border-gray-800 bg-[#050505] text-[10px] text-gray-600 font-mono text-center flex justify-between px-8">
          <span>LOG_ID: {Math.random().toString(36).substr(2, 9).toUpperCase()}</span>
          <span>SESSION: ACTIVE</span>
@@ -462,13 +452,11 @@ const ProjectCard = ({ project, index, onSelect }) => {
       onClick={() => onSelect(project)}
       className="bg-gray-900 p-6 rounded-lg border border-gray-700 hover:border-orange-400 transition-all duration-300 transform hover:scale-[1.02] cursor-pointer group flex flex-col h-full relative overflow-hidden"
     >
-      {/* Click Hint Overlay */}
       <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20 flex items-center gap-1 text-[10px] text-orange-400 font-mono bg-black/80 px-2 py-1 rounded border border-orange-500/30">
         <span className="animate-pulse">View Log</span>
         <Maximize2 className="w-3 h-3" />
       </div>
 
-      {/* Header */}
       <div className="flex justify-between items-start mb-4">
         <div className="flex items-center gap-3">
           <div className="p-2 bg-gray-800 rounded-md border border-gray-700 group-hover:bg-gray-800/80 transition-colors">
@@ -482,9 +470,7 @@ const ProjectCard = ({ project, index, onSelect }) => {
         <StatusBadge status={project.status} />
       </div>
 
-      {/* Body */}
       <div className="flex-grow flex flex-col gap-4">
-        {/* Type & Stack */}
         <div className="space-y-2">
           <div className="text-xs text-orange-500 font-mono flex items-center gap-1">
             <Terminal className="w-3 h-3" />
@@ -495,12 +481,10 @@ const ProjectCard = ({ project, index, onSelect }) => {
           </div>
         </div>
 
-        {/* Description */}
         <p className="text-sm text-gray-400 leading-relaxed line-clamp-3 group-hover:text-gray-300 transition-colors">
           {project.desc}
         </p>
 
-        {/* Metrics Grid */}
         <div className="mt-auto grid grid-cols-2 gap-2 pt-2 border-t border-gray-800/50">
           {project.stats.map((stat, idx) => (
             <div key={idx} className="bg-[#0a0a0a]/50 p-2 border border-gray-800 rounded group-hover:border-orange-500/20 transition-colors">
@@ -511,7 +495,6 @@ const ProjectCard = ({ project, index, onSelect }) => {
         </div>
       </div>
       
-      {/* Click To Know More Footer */}
       <div className="mt-4 pt-3 border-t border-gray-800 flex justify-end items-center gap-1 text-xs text-orange-500/70 group-hover:text-orange-400 font-mono opacity-0 group-hover:opacity-100 transition-all transform translate-y-2 group-hover:translate-y-0">
         <span>Initialize Log</span>
         <ChevronRight className="w-3 h-3" />
@@ -531,7 +514,6 @@ const ResearchLog = ({ item, index, onSelect }) => {
       onClick={() => onSelect(item)}
       className="bg-gray-900 p-6 rounded-lg border border-gray-700 hover:border-orange-400 transition transform hover:scale-[1.01] group relative cursor-pointer"
     >
-       {/* Click Hint Overlay */}
        <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20 flex items-center gap-1 text-[10px] text-orange-400 font-mono bg-black/80 px-2 py-1 rounded border border-orange-500/30">
         <span className="animate-pulse">View Abstract</span>
         <Maximize2 className="w-3 h-3" />
@@ -581,59 +563,45 @@ const StatsBar = ({ count }) => {
 
 const Projects = ({ addToRefs }) => {
   const [selectedItem, setSelectedItem] = useState(null);
-  const wrapperRef = useRef(null);
-
   
-  // Parallax Logic - Horizontal Scroll (Lenis Scroll Container)
-const { scrollY } = useScroll({
-  container: wrapperRef
-});
+  // Logic: Horizontal Scroll from Right to Left (0% -> -25%)
+  const { scrollY } = useScroll();
+  const backgroundX = useTransform(scrollY, [0, 1500], ["0%", "-25%"]); 
 
-  const backgroundX = useTransform(scrollY, [0, 1000], ["0%", "-10%"]); 
-
-  // Portal target check
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
     setMounted(true);
   }, []);
 
   return (
-   <section
-  id="projects"
-  ref={(el) => {
-    addToRefs(el);          // your existing logic
-    wrapperRef.current = el; // <-- connects Lenis scroll container
-  }}
-  className="min-h-screen relative overflow-x-hidden"
->
-
+    <section 
+      id="projects" 
+      ref={addToRefs} 
+      className="min-h-screen relative overflow-x-hidden"
+    >
       {/* Background Layers */}
-      {/* 1. Base Black: Prevents white flash */}
       <div className="fixed inset-0 w-full h-full bg-[#050505] -z-50" /> 
       
-      {/* 2. Parallax Image: Scales on top of black */}
+      {/* Scroll Effect: Move Right to Left using X transform */}
       <motion.div 
-  className="absolute inset-0 w-[120%] h-full -z-40 pointer-events-none" 
-  style={{ x: backgroundX }}
->
-
+        className="fixed inset-0 w-[130%] h-full -z-40 pointer-events-none" 
+        style={{ x: backgroundX }}
+      >
          <div 
             className="w-full h-full bg-cover bg-center opacity-40"
             style={{ 
               backgroundImage: "url('https://img.freepik.com/premium-vector/orange-black-background-with-circle-word-technology-it_42077-16464.jpg')",
-              filter: "brightness(0.5)" // Darkened for better text contrast
+              filter: "brightness(0.5)" 
             }}
          />
       </motion.div>
 
-      {/* 3. Dark Overlay: Ensures content readability */}
       <div className="fixed inset-0 z-[-30] bg-[#050505]/70 backdrop-blur-[2px] pointer-events-none" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-12 md:px-10 md:py-16">
         
         {/* Main Header Block */}
         <div className="flex flex-col items-center justify-center mb-16 space-y-6">
-           {/* Main Title */}
            <div className="text-center">
               <motion.h1 
                 className="text-5xl md:text-6xl font-bold tracking-tight inline-block cursor-default"
@@ -647,8 +615,8 @@ const { scrollY } = useScroll({
               >
                 <motion.span 
                   variants={{ 
-                    initial: { color: "#f97316" }, // orange-500
-                    hover: { color: "#ffffff" }    // white
+                    initial: { color: "#f97316" }, 
+                    hover: { color: "#ffffff" }    
                   }}
                   transition={{ duration: 0.3 }}
                 >
@@ -657,8 +625,8 @@ const { scrollY } = useScroll({
                 {" "}
                 <motion.span 
                   variants={{ 
-                    initial: { color: "#ffffff" }, // white
-                    hover: { color: "#f97316" }    // orange-500
+                    initial: { color: "#ffffff" }, 
+                    hover: { color: "#f97316" }    
                   }}
                   transition={{ duration: 0.3 }}
                 >
@@ -667,8 +635,8 @@ const { scrollY } = useScroll({
                 {" "}
                 <motion.span 
                   variants={{ 
-                    initial: { color: "#f97316" }, // orange-500
-                    hover: { color: "#ffffff" }    // white
+                    initial: { color: "#f97316" }, 
+                    hover: { color: "#ffffff" }    
                   }}
                   transition={{ duration: 0.3 }}
                 >
@@ -684,7 +652,6 @@ const { scrollY } = useScroll({
             <Layers className="w-8 h-8 text-white" />
             <h2 className="text-3xl text-white font-semibold tracking-wide">Projects</h2>
             <div className="h-1 w-16 bg-orange-500 rounded-full mt-2"></div>
-            {/* Stats Bar with correct count for Projects */}
             <StatsBar count="06" />
           </div>
 
@@ -706,7 +673,6 @@ const { scrollY } = useScroll({
             <FileText className="w-8 h-8 text-white" />
             <h2 className="text-3xl text-white font-semibold tracking-wide">Research Work</h2>
             <div className="h-1 w-16 bg-orange-500 rounded-full mt-2"></div>
-            {/* Stats Bar with correct count for Research */}
             <StatsBar count="03" />
           </div>
 
@@ -726,15 +692,13 @@ const { scrollY } = useScroll({
       
       {/* Footer */}
       <footer className="relative z-10 mt-12 text-center border-t border-gray-800 pt-8 pb-4">
-        {/* Footer content removed as requested */}
       </footer>
 
-      {/* Detail Panel Overlay (Modal) - Teleported to Body */}
+      {/* Detail Panel Overlay */}
       {mounted && createPortal(
         <AnimatePresence>
           {selectedItem && (
             <>
-              {/* Backdrop */}
               <motion.div 
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -742,7 +706,6 @@ const { scrollY } = useScroll({
                 onClick={() => setSelectedItem(null)}
                 className="fixed inset-0 bg-black/60 backdrop-blur-sm z-[9998]"
               />
-              {/* Panel */}
               <DetailPanel 
                 item={selectedItem} 
                 onClose={() => setSelectedItem(null)} 
