@@ -143,7 +143,6 @@ const METRICS_DATA = [
   { label: "HackerRank C++", value: "5 STAR", sub: "Problem Solving", icon: <Terminal className="w-4 h-4" /> },
   { label: "National Winner", value: "My India Campaign", sub: "Pilot Pen Campaign", icon: <Award className="w-4 h-4" /> },
   { label: "ACM Student Chapter", value: "VICE PRESIDENT", sub: "Leadership Role", icon: <Users className="w-4 h-4" /> },
-  // Replaced MS-CIT with NPTEL
   { label: "NPTEL Certification", value: "SILVER", sub: "Petroleum Data Analytics", icon: <ShieldCheck className="w-4 h-4" /> },
 ];
 
@@ -220,10 +219,10 @@ const SectionHeading = ({ icon, title }) => (
     variants={fadeInUp}
     whileHover={{ scale: 1.05, originX: 0 }}
     transition={{ type: "spring", stiffness: 300 }}
-    className="text-3xl font-bold text-white mb-8 flex items-center gap-3 border-l-4 border-orange-500 pl-4 w-fit cursor-default"
+    className="text-2xl md:text-3xl font-bold text-white mb-6 md:mb-8 flex items-center gap-3 border-l-4 border-orange-500 pl-4 w-fit cursor-default"
   >
     <span className="p-1.5 bg-orange-500/10 rounded-md border border-orange-500/20">
-      {React.cloneElement(icon, { className: "w-6 h-6 text-orange-500" })}
+      {React.cloneElement(icon, { className: "w-5 h-5 md:w-6 md:h-6 text-orange-500" })}
     </span>
     {title}
   </motion.h3>
@@ -282,12 +281,12 @@ const PreviewModal = ({ item, initialIndex = 0, onClose }) => {
       onClick={onClose}
     >
       <div className="flex justify-between items-center mb-4 text-white w-full max-w-6xl mx-auto" onClick={(e) => e.stopPropagation()}>
-        <div className="flex flex-col">
-          <h2 className="text-xl font-bold flex items-center gap-2">
-            <FileText className="w-5 h-5 text-orange-500" />
-            {item.title}
+        <div className="flex flex-col max-w-[70%]">
+          <h2 className="text-lg md:text-xl font-bold flex items-center gap-2 truncate">
+            <FileText className="w-5 h-5 text-orange-500 shrink-0" />
+            <span className="truncate">{item.title}</span>
           </h2>
-          <span className="text-xs text-gray-400 font-mono mt-1">
+          <span className="text-xs text-gray-400 font-mono mt-1 truncate">
             {item.issuer || item.organization || "CERTIFICATE_PREVIEW"} 
             {hasMultiple && ` [${currentIndex + 1}/${images.length}]`}
           </span>
@@ -298,7 +297,7 @@ const PreviewModal = ({ item, initialIndex = 0, onClose }) => {
             href={downloadUrl} 
             target="_blank" 
             rel="noopener noreferrer"
-            className="flex items-center gap-2 px-4 py-2 bg-orange-500 hover:bg-orange-600 text-black text-sm font-bold rounded transition-colors"
+            className="flex items-center gap-2 px-3 py-2 md:px-4 bg-orange-500 hover:bg-orange-600 text-black text-sm font-bold rounded transition-colors"
           >
             <Download className="w-4 h-4" />
             <span className="hidden md:inline">DOWNLOAD</span>
@@ -320,13 +319,13 @@ const PreviewModal = ({ item, initialIndex = 0, onClose }) => {
           <>
             <button 
               onClick={handlePrev}
-              className="absolute left-0 md:-left-12 z-10 p-2 bg-black/50 hover:bg-orange-500 hover:text-black text-white rounded-full transition-all border border-gray-700"
+              className="absolute left-0 md:-left-12 z-10 p-2 bg-black/50 hover:bg-orange-500 hover:text-black text-white rounded-full transition-all border border-gray-700 backdrop-blur-sm"
             >
               <ChevronLeft className="w-6 h-6" />
             </button>
             <button 
               onClick={handleNext}
-              className="absolute right-0 md:-right-12 z-10 p-2 bg-black/50 hover:bg-orange-500 hover:text-black text-white rounded-full transition-all border border-gray-700"
+              className="absolute right-0 md:-right-12 z-10 p-2 bg-black/50 hover:bg-orange-500 hover:text-black text-white rounded-full transition-all border border-gray-700 backdrop-blur-sm"
             >
               <ChevronRight className="w-6 h-6" />
             </button>
@@ -373,6 +372,7 @@ const AwardCard = ({ item, index, onPreview }) => {
     <motion.div 
       variants={cardVariants}
       whileHover={{ scale: 1.02 }}
+      whileTap={{ scale: 0.98 }}
       className="group relative bg-[#0a0a0a] border border-gray-800 hover:border-orange-500/50 transition-all duration-300 rounded-lg overflow-hidden flex flex-col h-full z-10 cursor-default"
     >
       <div className="flex justify-between items-center p-4 border-b border-gray-800 bg-gray-900/30 backdrop-blur-sm">
@@ -506,7 +506,6 @@ const Achievements = ({ addToRefs }) => {
     }
   };
 
-  // Duplicate list for infinite scroll feel
   const scrollableList = [...CERTIFICATIONS_DATA, ...CERTIFICATIONS_DATA, ...CERTIFICATIONS_DATA];
 
   return (
@@ -532,7 +531,8 @@ const Achievements = ({ addToRefs }) => {
 
       <div className="absolute inset-0 z-[-30] bg-black/40 backdrop-blur-[1px] pointer-events-none" />
 
-      <div className="container mx-auto px-6 md:px-10 relative z-10">
+      {/* Optimized Padding for Mobile */}
+      <div className="container mx-auto px-4 md:px-10 relative z-10">
         
         {/* Section Header with Hover Effects */}
         <motion.div 
@@ -547,6 +547,7 @@ const Achievements = ({ addToRefs }) => {
                 initial="initial"
                 whileHover="hover"
                 variants={{ hover: { scale: 1.05, transition: { duration: 0.3 } } }}
+                // Responsive text size: text-4xl on mobile, text-5xl on desktop
                 className="text-4xl md:text-5xl font-bold uppercase tracking-tight mb-2 cursor-default"
               >
                 <motion.span 
@@ -618,6 +619,7 @@ const Achievements = ({ addToRefs }) => {
                 key={idx} 
                 variants={fadeInUp}
                 whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.98 }} // Added tap feedback for mobile
                 className="bg-gray-900/50 border border-gray-800 p-4 rounded hover:bg-gray-800 transition-colors group relative overflow-hidden"
               >
                 <div className="absolute top-0 right-0 p-2 opacity-20 group-hover:opacity-100 group-hover:text-orange-500 transition-all">
@@ -644,7 +646,7 @@ const Achievements = ({ addToRefs }) => {
         variants={fadeInUp}
         className="relative w-full"
       >
-         <div className="container mx-auto px-6 md:px-10 mb-4">
+         <div className="container mx-auto px-4 md:px-10 mb-4">
             <SectionHeading icon={<ScrollText />} title="Certifications" />
          </div>
          
@@ -652,11 +654,12 @@ const Achievements = ({ addToRefs }) => {
             ref={scrollContainerRef}
             className="w-full border-y border-gray-800 bg-gray-900/80 py-8 overflow-x-auto backdrop-blur-md [&::-webkit-scrollbar]:h-1.5 [&::-webkit-scrollbar-track]:bg-gray-900/20 [&::-webkit-scrollbar-thumb]:bg-orange-500/20 hover:[&::-webkit-scrollbar-thumb]:bg-orange-500/80 transition-colors"
          >
-            <div className="flex items-center gap-6 w-max pl-10 pr-10 cursor-grab active:cursor-grabbing">
+            <div className="flex items-center gap-6 w-max pl-4 md:pl-10 pr-10 cursor-grab active:cursor-grabbing">
             {scrollableList.map((cert, i) => (
                 <motion.div 
                   key={i} 
                   whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.98 }} // Added tap feedback for mobile
                   className="bg-[#0a0a0a] border border-gray-800 p-3 rounded-lg hover:border-orange-500/50 transition-colors duration-300 group flex flex-col gap-3 min-w-[220px] max-w-[240px]"
                 >
                     <div 
