@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { createPortal } from 'react-dom';
 import { motion, useScroll, useTransform, AnimatePresence } from 'framer-motion';
-// UNCOMMENT THE LINE BELOW AFTER RUNNING: npm install @emailjs/browser
-// import emailjs from '@emailjs/browser'; 
+import emailjs from '@emailjs/browser'; 
 import { 
   Mail, 
   Send, 
@@ -308,7 +307,7 @@ const Contact = ({ addToRefs }) => {
     setIsLoading(true);
 
     // --- 1. EMAILJS INTEGRATION (Uncomment this block for production) ---
-    /*
+    
     try {
         await emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, formRef.current, PUBLIC_KEY);
         console.log("Email sent successfully");
@@ -322,15 +321,7 @@ const Contact = ({ addToRefs }) => {
         setIsLoading(false);
         alert("Failed to send message via EmailJS.");
     }
-    */
 
-    // --- 2. PREVIEW SIMULATION (Remove this block in production) ---
-    await new Promise(resolve => setTimeout(resolve, 2000)); // Simulated delay
-    setIsLoading(false);
-    setIsSent(true);
-    setTimeout(() => setIsSent(false), 5000);
-    setFormData({ name: '', email: '', message: '' });
-  };
 
   return (
     <section 
