@@ -321,7 +321,7 @@ const Contact = ({ addToRefs }) => {
         setIsLoading(false);
         alert("Failed to send message via EmailJS.");
     }
-
+};
 
   return (
     <section 
