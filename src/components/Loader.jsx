@@ -45,14 +45,14 @@ const INITIAL_ORANGE_DURATION = 0.5;
 const BLACK_CIRCLE_REVEAL_DURATION = 0.8;
 const ANALYTICAL_LOAD_DURATION = 3.5;
 const ANALYTICAL_FADE_OUT_DURATION = 1.0; 
-const NAME_INTRO_PAUSE = 1.2; // How long to show the name before zooming
-const SAHIL_HIRVE_ZOOM_DURATION = 1.2; // How long "SAHIL HIRVE" zooms out
+const NAME_INTRO_PAUSE = 1.2; // How long to show the name before flickering
+const SAHIL_HIRVE_FLICKER_DURATION = 2.0; // Duration of the flicker/glow effect
 
 // -------------------------
 
-export default function Loader({ onComplete }) { // Renamed from onLoaded to match your prop
+export default function Loader({ onComplete }) {
   const [currentMessageIndex, setCurrentMessageIndex] = useState(0);
-  // Stages: "orange", "analytical", "nameIntro", "nameZoom"
+  // Stages: "orange", "analytical", "nameIntro", "nameFlicker"
   const [stage, setStage] = useState("orange"); 
   const count = useMotionValue(0);
   const roundedCounter = useTransform(count, (latest) => Math.round(latest));
@@ -72,20 +72,20 @@ export default function Loader({ onComplete }) { // Renamed from onLoaded to mat
       setStage("nameIntro");
     }, (INITIAL_ORANGE_DURATION + BLACK_CIRCLE_REVEAL_DURATION + ANALYTICAL_LOAD_DURATION) * 1000);
 
-    // 3. Timer to move from nameIntro to nameZoom
-    const nameZoomTimer = setTimeout(() => {
-      setStage("nameZoom");
+    // 3. Timer to move from nameIntro to nameFlicker (Glow/Flicker effect)
+    const nameFlickerTimer = setTimeout(() => {
+      setStage("nameFlicker");
     }, (INITIAL_ORANGE_DURATION + BLACK_CIRCLE_REVEAL_DURATION + ANALYTICAL_LOAD_DURATION + NAME_INTRO_PAUSE) * 1000);
 
     // 4. Timer to call onComplete and finish the loader
     const completeTimer = setTimeout(() => {
       if (onComplete) onComplete();
-    }, (INITIAL_ORANGE_DURATION + BLACK_CIRCLE_REVEAL_DURATION + ANALYTICAL_LOAD_DURATION + NAME_INTRO_PAUSE + SAHIL_HIRVE_ZOOM_DURATION) * 1000);
+    }, (INITIAL_ORANGE_DURATION + BLACK_CIRCLE_REVEAL_DURATION + ANALYTICAL_LOAD_DURATION + NAME_INTRO_PAUSE + SAHIL_HIRVE_FLICKER_DURATION) * 1000);
 
     return () => {
       clearTimeout(analyticalTimer);
       clearTimeout(nameIntroTimer);
-      clearTimeout(nameZoomTimer);
+      clearTimeout(nameFlickerTimer);
       clearTimeout(completeTimer);
     };
   }, [onComplete]);
@@ -115,13 +115,13 @@ export default function Loader({ onComplete }) { // Renamed from onLoaded to mat
       clearInterval(messageInterval);
       counterControls.stop();
     };
-  }, [stage]); 
+  }, [stage, count]); 
 
 
   return (
     <motion.div
       className="loader-container fixed inset-0 z-[100] flex flex-col items-center justify-center 
-                 text-white overflow-hidden" // Main container
+                   text-white overflow-hidden" // Main container
       style={{ backgroundColor: "rgb(251 146 60)" }} // Starts orange
     >
       
@@ -201,24 +201,35 @@ export default function Loader({ onComplete }) { // Renamed from onLoaded to mat
       </motion.div>
 
 
-      {/* 4. Sahil Hirve Exit Animation */}
+      {/* 4. Sahil Hirve Entrance & Flicker Exit */}
       <AnimatePresence>
-        {/* Mount this when stage is nameIntro OR nameZoom */}
-        {(stage === "nameIntro" || stage === "nameZoom") && (
+        {(stage === "nameIntro" || stage === "nameFlicker") && (
           <motion.h1
-            // 4, 5, 6: Size, Font, and Color
-            className="text-7xl md:text-8xl font-mato font-extrabold text-transparent 
-                       absolute inset-0 flex items-center justify-center"
-            initial={{ scale: 1, opacity: 0 }}
-            // 7. Animate based on stage
-            animate={ stage === "nameIntro" 
-                ? { scale: 1, opacity: 1 } // Fade in and stay
-                : { scale: 50, opacity: 0 } // Zoom into "S" and fade out
+            className="text-6xl md:text-8xl font-extrabold text-transparent absolute inset-0 flex items-center justify-center tracking-tighter z-50"
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={stage === "nameIntro" 
+              ? { opacity: 1, scale: 1 } 
+              : { 
+                  // The Flicker Effect Sequence
+                  opacity: [1, 0.4, 1, 0.2, 1, 0], 
+                  textShadow: [
+                    "0px 0px 0px rgb(251 146 60)", 
+                    "0px 0px 10px rgb(251 146 60)", 
+                    "0px 0px 0px rgb(251 146 60)", 
+                    "0px 0px 30px rgb(251 146 60)", 
+                    "0px 0px 50px rgb(251 146 60)", 
+                    "0px 0px 0px rgb(251 146 60)"
+                  ]
+                }
             }
-            transition={{ duration: SAHIL_HIRVE_ZOOM_DURATION, ease: "easeIn" }}
+            transition={{ 
+              duration: stage === "nameIntro" ? 0.8 : SAHIL_HIRVE_FLICKER_DURATION, 
+              ease: "easeInOut",
+              times: stage === "nameFlicker" ? [0, 0.1, 0.2, 0.3, 0.6, 1] : undefined // Controls timing of flickers
+            }}
             style={{ 
               WebkitTextStroke: "2px rgb(251 146 60)", // Orange border
-              transformOrigin: "30% 50%" // Set origin to the "S"
+              fontFamily: "monospace"
             }}
           >
             SAHIL HIRVE
