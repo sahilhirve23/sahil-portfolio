@@ -35,34 +35,43 @@ const simpleScaleVariants = {
   })
 };
 
-// --- Typewriter Component ---
+// --- Fixed Typewriter Component ---
 
-const TypewriterBlock = ({ text, delay = 0, speed = 5, onComplete }) => {
+const TypewriterBlock = ({ text, delay = 0, speed = 10, onComplete }) => {
   const [displayedText, setDisplayedText] = useState('');
   const [isComplete, setIsComplete] = useState(false);
-  const indexRef = useRef(0);
 
   useEffect(() => {
+    // Reset state when text changes
     setDisplayedText('');
-    indexRef.current = 0;
     setIsComplete(false);
 
-    const startTimeout = setTimeout(() => {
-      const intervalId = setInterval(() => {
-        if (indexRef.current < text.length) {
-          setDisplayedText((prev) => prev + text.charAt(indexRef.current));
-          indexRef.current++;
+    let timeoutId;
+    let intervalId;
+
+    // Start the delay timer
+    timeoutId = setTimeout(() => {
+      let currentIndex = 0;
+      
+      // Start the typing interval
+      intervalId = setInterval(() => {
+        if (currentIndex <= text.length) {
+          // Use slice to ensure text integrity even if interval fluctuates
+          setDisplayedText(text.slice(0, currentIndex));
+          currentIndex++;
         } else {
           setIsComplete(true);
           clearInterval(intervalId);
           if (onComplete) onComplete();
         }
       }, speed);
-
-      return () => clearInterval(intervalId);
     }, delay);
 
-    return () => clearTimeout(startTimeout);
+    // Cleanup function to clear both timers
+    return () => {
+      clearTimeout(timeoutId);
+      if (intervalId) clearInterval(intervalId);
+    };
   }, [text, delay, speed, onComplete]);
 
   return (
@@ -407,7 +416,7 @@ const DetailPanel = ({ item, onClose }) => {
                 <div className="pl-4 border-l border-gray-800">
                   <TypewriterBlock 
                     text={section.content} 
-                    speed={5} 
+                    speed={15} 
                     delay={idx * 300} 
                   />
                 </div>
@@ -452,7 +461,7 @@ const ProjectCard = ({ project, index, onSelect }) => {
       viewport={{ once: true, margin: "-50px" }}
       variants={simpleScaleVariants}
       onClick={() => onSelect(project)}
-      whileHover={{ scale: 1.03, boxShadow: "0 0 20px rgba(249,115,22,0.2)", borderColor: "rgba(249,115,22,0.6)" }}
+      whileHover={{ scale: 1.03, boxShadow: "0 0 20px rgba(249,115,22,0.3)", borderColor: "rgba(249,115,22,0.8)" }}
       className="bg-gray-900 p-6 rounded-lg border border-gray-700 transition-all duration-300 cursor-pointer group flex flex-col h-full relative overflow-hidden"
     >
       {/* Click Hint Overlay */}
@@ -619,7 +628,7 @@ const Projects = ({ addToRefs }) => {
 
   // Map the scroll progress to x-axis translation (Move LEFT as you scroll DOWN)
   // Range is 40% to -40% to provide a fast parallax speed
-  const backgroundX = useTransform(scrollYProgress, [0, 1], ["60%", "-60%"]); 
+  const backgroundX = useTransform(scrollYProgress, [0, 1], ["40%", "-40%"]); 
 
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
@@ -647,7 +656,7 @@ const Projects = ({ addToRefs }) => {
       {/* 2. Parallax Image Layer */}
       {/* Note: 'scale: 1.2' helps prevent whitespace at edges during the parallax movement */}
       <motion.div 
-        className="absolute inset-y-0 left-[-60%] w-[220%] h-full -z-40 pointer-events-none opacity-60" 
+        className="absolute inset-y-0 left-[-40%] w-[180%] h-full -z-40 pointer-events-none opacity-60" 
         style={{ x: backgroundX }}
       >
          <div 
@@ -659,7 +668,7 @@ const Projects = ({ addToRefs }) => {
       </motion.div>
 
       {/* 3. Gradient Overlay */}
-      <div className="absolute inset-0 z-[-30] bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-orange-900/10 via-[#050505]/30 to-[#050505] pointer-events-none" />
+      <div className="absolute inset-0 z-[-30] bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-orange-900/10 via-[#050505]/50 to-[#050505] pointer-events-none" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-12 md:px-10 md:py-16">
         
