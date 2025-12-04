@@ -120,15 +120,24 @@ useEffect(() => {
           "Achievements",
           "Skills",
           "About",
-          "Contact",
         ].map((item) => (
           <motion.li
             key={item}
-            onClick={(e) => {
-              e.preventDefault();
-              setActive(item);
-              scrollToSection(item.toLowerCase());
-            }}
+            onClick={(e) =>{
+  e.preventDefault();
+  setActive(item);
+
+  const section = document.getElementById(item.toLowerCase());
+  if (!section) return;
+
+  const navOffset = 80; // adjust if navbar height changes
+  const scrollPos = section.offsetTop - navOffset;
+
+  window.scrollTo({
+    top: scrollPos,
+    behavior: "smooth",
+  });
+}}
             className={`relative cursor-pointer transition-all duration-300 ${
   active === item ? "font-bold text-orange-400" : "text-gray-300 hover:text-orange-300"
 }`}
@@ -169,7 +178,6 @@ useEffect(() => {
           "achievements",
           "skills",
           "about",
-          "contact",
         ].map((s) => (
           <option key={s} value={s}>
             {s.charAt(0).toUpperCase() + s.slice(1)}
