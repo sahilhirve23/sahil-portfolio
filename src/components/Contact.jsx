@@ -110,9 +110,12 @@ const TypewriterText = ({ text }) => {
   const indexRef = useRef(0);
 
   useEffect(() => {
-    setDisplayedText("");
-    indexRef.current = 0;
-    
+  setDisplayedText("");
+  indexRef.current = 0;
+
+  const startDelay = 80; // allows React to apply reset before typing starts
+
+  const timeoutId = setTimeout(() => {
     const intervalId = setInterval(() => {
       if (indexRef.current < text.length) {
         setDisplayedText((prev) => prev + text.charAt(indexRef.current));
@@ -120,10 +123,18 @@ const TypewriterText = ({ text }) => {
       } else {
         clearInterval(intervalId);
       }
-    }, 20); // Typing speed
+    }, 20);
 
-    return () => clearInterval(intervalId);
-  }, [text]);
+    // store interval so cleanup clears it
+    indexRef.current.intervalId = intervalId;
+  }, startDelay);
+
+  return () => {
+    clearTimeout(timeoutId);
+    clearInterval(indexRef.current.intervalId);
+  };
+}, [text]);
+
 
   return (
     <p className="font-mono text-sm md:text-base text-gray-300 leading-relaxed whitespace-pre-wrap">
@@ -341,7 +352,9 @@ const Contact = ({ addToRefs }) => {
         className="absolute inset-y-0 left-0 w-[150%] h-full -z-40 pointer-events-none opacity-40"
         style={{ x: backgroundX }}
       >
-        <div className="absolute inset-0 bg-[url('https://i.pinimg.com/736x/75/11/9c/75119c530c58a19abc02f71ce264c503.jpg')] bg-cover bg-center" />
+       <div
+  className="absolute inset-0 bg-[url('https://media.gettyimages.com/id/1449327718/video/social-media-chart-inside.jpg?s=640x640&k=20&c=sepkMlGU0dl7bx3kp-xOr12VVVI_uo-oVcgmbytnMog=')] bg-cover bg-center"
+/>
       </motion.div>
 
       {/* 3. Gradient Overlay */}
