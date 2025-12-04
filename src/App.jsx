@@ -29,6 +29,9 @@ export default function App() {
     }
 
     if (!isLoading) {
+window.scrollTo(0, 0);
+if (lenisRef.current) lenisRef.current.scrollTo(0, { immediate: true });
+      
       lenisRef.current = new Lenis({ duration: 1.2, smooth: true });
 
       const raf = (time) => {
