@@ -11,11 +11,10 @@ import {
   FileText, 
   Code, 
   Layers, 
-  BarChart3,
-  X,
-  ChevronRight,
-  Maximize2,
-  Lock
+  BarChart3, 
+  X, 
+  ChevronRight, 
+  Maximize2
 } from 'lucide-react';
 
 // --- Animation Variants ---
@@ -453,7 +452,8 @@ const ProjectCard = ({ project, index, onSelect }) => {
       viewport={{ once: true, margin: "-50px" }}
       variants={simpleScaleVariants}
       onClick={() => onSelect(project)}
-      className="bg-gray-900 p-6 rounded-lg border border-gray-700 hover:border-orange-400 transition-all duration-300 transform hover:scale-[1.02] cursor-pointer group flex flex-col h-full relative overflow-hidden"
+      whileHover={{ scale: 1.03, boxShadow: "0 0 20px rgba(249,115,22,0.2)", borderColor: "rgba(249,115,22,0.6)" }}
+      className="bg-gray-900 p-6 rounded-lg border border-gray-700 transition-all duration-300 cursor-pointer group flex flex-col h-full relative overflow-hidden"
     >
       {/* Click Hint Overlay */}
       <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20 flex items-center gap-1 text-[10px] text-orange-400 font-mono bg-black/80 px-2 py-1 rounded border border-orange-500/30">
@@ -522,7 +522,8 @@ const ResearchLog = ({ item, index, onSelect }) => {
       viewport={{ once: true, margin: "-50px" }}
       variants={simpleScaleVariants}
       onClick={() => onSelect(item)}
-      className="bg-gray-900 p-6 rounded-lg border border-gray-700 hover:border-orange-400 transition transform hover:scale-[1.01] group relative cursor-pointer"
+      whileHover={{ scale: 1.02, boxShadow: "0 0 20px rgba(249,115,22,0.2)", borderColor: "rgba(249,115,22,0.6)" }}
+      className="bg-gray-900 p-6 rounded-lg border border-gray-700 transition transform group relative cursor-pointer"
     >
        {/* Click Hint Overlay */}
        <div className="absolute top-3 right-3 opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-20 flex items-center gap-1 text-[10px] text-orange-400 font-mono bg-black/80 px-2 py-1 rounded border border-orange-500/30">
@@ -555,6 +556,40 @@ const ResearchLog = ({ item, index, onSelect }) => {
   );
 };
 
+const SectionHeading = ({ icon, title, subtitle }) => {
+  return (
+    <motion.div 
+      className="flex flex-col items-center gap-3 mb-12 group cursor-default"
+      whileHover={{ scale: 1.05 }}
+    >
+      <motion.div 
+        className="p-2 bg-transparent rounded-lg"
+        whileHover={{ 
+          filter: "drop-shadow(0 0 8px rgba(249,115,22,0.8))",
+          scale: 1.1
+        }}
+      >
+        {React.cloneElement(icon, { className: "w-8 h-8 text-white group-hover:text-orange-500 transition-colors" })}
+      </motion.div>
+      <motion.h2 
+        className="text-3xl text-white font-semibold tracking-wide group-hover:text-orange-500 transition-colors duration-300"
+        whileHover={{ 
+            textShadow: "0 0 8px rgba(249,115,22,0.5)"
+        }}
+      >
+        {title}
+      </motion.h2>
+      <div className="h-1 w-16 bg-orange-500 rounded-full mt-2 group-hover:shadow-[0_0_15px_#f97316] transition-shadow"></div>
+      <motion.div 
+        className="mt-4"
+        whileHover={{ scale: 1.05 }}
+      >
+        {subtitle}
+      </motion.div>
+    </motion.div>
+  );
+};
+
 const StatsBar = ({ count }) => {
   const [currentTime, setCurrentTime] = useState(new Date().toLocaleTimeString());
 
@@ -564,7 +599,7 @@ const StatsBar = ({ count }) => {
   }, []);
 
   return (
-    <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8 text-[10px] md:text-xs font-mono text-gray-500 bg-gray-900/50 px-6 py-2 rounded-full border border-gray-800/50 mt-4">
+    <div className="flex flex-wrap items-center justify-center gap-4 md:gap-8 text-[10px] md:text-xs font-mono text-gray-500 bg-gray-900/50 px-6 py-2 rounded-full border border-gray-800/50">
       <span>[TOTAL_MODULES: {count}]</span>
       <span>[SYS_TIME: {currentTime}]</span>
       <span className="text-orange-500/80">[STATUS: ONLINE]</span>
@@ -574,24 +609,23 @@ const StatsBar = ({ count }) => {
 
 const Projects = ({ addToRefs }) => {
   const [selectedItem, setSelectedItem] = useState(null);
-  const sectionRef = useRef(null); // We need a ref to the section for scroll progress
+  const sectionRef = useRef(null); 
 
-  // Parallax Logic - Horizontal Scroll from Right to Left (0% -> -25%)
-  // We track the scroll progress of the section itself.
+  // Parallax Logic - Horizontal Scroll from Right to Left
   const { scrollYProgress } = useScroll({
     target: sectionRef,
-    offset: ["start end", "end start"] // Triggers as section enters viewport until it leaves
+    offset: ["start end", "end start"] 
   });
 
-  // Map the scroll progress (0 to 1) to x-axis translation
-  const backgroundX = useTransform(scrollYProgress, [0, 1], ["0%", "-25%"]); 
+  // Map the scroll progress to x-axis translation (Move LEFT as you scroll DOWN)
+  // Range is 40% to -40% to provide a fast parallax speed
+  const backgroundX = useTransform(scrollYProgress, [0, 1], ["60%", "-60%"]); 
 
   const [mounted, setMounted] = useState(false);
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  // Safely handle addToRefs if it's undefined
   const handleRef = (el) => {
     if (el) {
         sectionRef.current = el;
@@ -607,24 +641,25 @@ const Projects = ({ addToRefs }) => {
       ref={handleRef}
       className="min-h-screen relative overflow-hidden" 
     >
-      {/* Background Layers */}
+      {/* 1. Base Black Background */}
       <div className="absolute inset-0 w-full h-full bg-[#050505] -z-50" /> 
       
-      {/* Scroll Effect: Move Right to Left using X transform */}
+      {/* 2. Parallax Image Layer */}
+      {/* Note: 'scale: 1.2' helps prevent whitespace at edges during the parallax movement */}
       <motion.div 
-        className="absolute inset-y-0 left-0 w-[130%] h-full -z-40 pointer-events-none" 
+        className="absolute inset-y-0 left-[-60%] w-[220%] h-full -z-40 pointer-events-none opacity-60" 
         style={{ x: backgroundX }}
       >
          <div 
-            className="w-full h-full bg-cover bg-center opacity-40"
+            className="w-full h-full bg-cover bg-center"
             style={{ 
-              backgroundImage: "url('https://img.freepik.com/premium-vector/orange-black-background-with-circle-word-technology-it_42077-16464.jpg')",
-              filter: "brightness(0.5)" 
+              backgroundImage: "url('https://png.pngtree.com/thumb_back/fh260/background/20241227/pngtree-dark-data-analytics-dashboard-black-background-image_16870487.jpg')",
             }}
          />
       </motion.div>
 
-      <div className="absolute inset-0 z-[-30] bg-[#050505]/70 backdrop-blur-[2px] pointer-events-none" />
+      {/* 3. Gradient Overlay */}
+      <div className="absolute inset-0 z-[-30] bg-[radial-gradient(ellipse_at_top_right,_var(--tw-gradient-stops))] from-orange-900/10 via-[#050505]/30 to-[#050505] pointer-events-none" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-6 py-12 md:px-10 md:py-16">
         
@@ -676,12 +711,11 @@ const Projects = ({ addToRefs }) => {
 
         {/* Section 1: Projects */}
         <div className="mb-24">
-          <div className="flex flex-col items-center gap-3 mb-12">
-            <Layers className="w-8 h-8 text-white" />
-            <h2 className="text-3xl text-white font-semibold tracking-wide">Projects</h2>
-            <div className="h-1 w-16 bg-orange-500 rounded-full mt-2"></div>
-            <StatsBar count="06" />
-          </div>
+          <SectionHeading 
+            icon={<Layers />} 
+            title="Projects" 
+            subtitle={<StatsBar count="06" />}
+          />
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {PROJECT_DATA.map((project, index) => (
@@ -697,12 +731,11 @@ const Projects = ({ addToRefs }) => {
 
         {/* Section 2: Research Log */}
         <div className="pb-12">
-          <div className="flex flex-col items-center gap-3 mb-12">
-            <FileText className="w-8 h-8 text-white" />
-            <h2 className="text-3xl text-white font-semibold tracking-wide">Research Work</h2>
-            <div className="h-1 w-16 bg-orange-500 rounded-full mt-2"></div>
-            <StatsBar count="03" />
-          </div>
+          <SectionHeading 
+            icon={<FileText />} 
+            title="Research Work" 
+            subtitle={<StatsBar count="03" />}
+          />
 
           <div className="grid gap-6">
             {RESEARCH_DATA.map((item, index) => (
