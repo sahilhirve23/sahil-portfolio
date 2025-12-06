@@ -50,17 +50,20 @@ const cardVariants = {
   }
 };
 
-// --- Helper Functions ---
+// --- Helper Functions (FIXED) ---
 
 const getDriveId = (url) => {
   if (!url) return null;
-  const match = url.match(/\/d\/(.+?)\//) || url.match(/\/d\/(.+?)$/);
+  // Regex to capture the ID between /d/ and / or end of string
+  const match = url.match(/\/d\/([-a-zA-Z0-9_]+)/);
   return match ? match[1] : null;
 };
 
 const getDriveThumbnail = (url) => {
   const id = getDriveId(url);
-  return id ? `https://googleusercontent.com/profile/picture/0{id}` : url;
+  // FIX: Use the correct Google Drive thumbnail endpoint with high resolution (sz=w800)
+  // Also fixed the string interpolation syntax from {id} to ${id}
+  return id ? `https://drive.google.com/thumbnail?id=${id}&sz=w800` : url;
 };
 
 // --- Data Constants ---
@@ -439,6 +442,7 @@ const AwardCard = ({ item, index, onPreview }) => {
                               <img 
                                   src={getDriveThumbnail(img)} 
                                   alt={`${item.title} ${i+1}`} 
+                                  loading="lazy"
                                   className="w-full h-full object-cover opacity-70 group-hover/img:opacity-100 transition-all duration-500"
                               />
                               <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent opacity-60 pointer-events-none"></div>
@@ -687,6 +691,7 @@ const Achievements = ({ addToRefs }) => {
                                   e.target.parentElement.innerHTML = `<div class="w-full h-full flex items-center justify-center bg-gray-900 text-gray-600 font-mono text-[10px]">CERTIFICATE</div>`;
                               }}
                               alt={cert.title}
+                              loading="lazy"
                               className="w-full h-full object-cover opacity-60 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500 grayscale group-hover:grayscale-0"
                            />
                         )}
