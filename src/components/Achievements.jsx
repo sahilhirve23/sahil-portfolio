@@ -8,15 +8,15 @@ import {
   Terminal, 
   ExternalLink, 
   Trophy, 
-  Users,
-  ShieldCheck,
-  ScrollText,
-  Download,
-  X,
-  Maximize2,
-  CheckCircle2,
-  ChevronLeft,
-  ChevronRight
+  Users, 
+  ShieldCheck, 
+  ScrollText, 
+  Download, 
+  X, 
+  Maximize2, 
+  CheckCircle2, 
+  ChevronLeft, 
+  ChevronRight 
 } from 'lucide-react';
 
 // --- Animation Variants ---
@@ -375,7 +375,7 @@ const AwardCard = ({ item, index, onPreview }) => {
       variants={cardVariants}
       whileHover={{ scale: 1.02 }}
       whileTap={{ scale: 0.98 }}
-      className="group relative bg-[#0a0a0a] border border-gray-800 hover:border-orange-500/50 transition-all duration-300 rounded-lg overflow-hidden flex flex-col h-full z-10 cursor-default"
+      className="group relative bg-[#0a0a0a] border border-gray-800 hover:border-orange-500/50 transition-all duration-300 rounded-lg overflow-hidden flex flex-col h-auto md:h-full z-10 cursor-default"
     >
       <div className="flex justify-between items-center p-3 md:p-4 border-b border-gray-800 bg-gray-900/30 backdrop-blur-sm">
         <div className="flex items-center gap-2 text-orange-400 font-mono text-xs uppercase tracking-wider">
@@ -385,11 +385,18 @@ const AwardCard = ({ item, index, onPreview }) => {
         <StatusBadge status={item.status} />
       </div>
 
-      <div className="p-4 md:p-8 grid md:grid-cols-2 gap-6 h-full items-stretch flex flex-col-reverse md:grid">
+      {/* LAYOUT FIX: 
+         - Mobile: Flex Col (Order explicit: Image Top [Order-1], Text Bottom [Order-2])
+         - Desktop: Grid (Text Left [Order-1], Image Right [Order-2])
+         - Added gap-4 to ensure they don't overlap on mobile.
+      */}
+      <div className="p-4 md:p-8 flex flex-col md:grid md:grid-cols-2 gap-4 md:gap-6 h-auto md:h-full items-stretch">
+        
+        {/* TEXT CONTENT WRAPPER: Order-2 on Mobile (Bottom), Order-1 on Desktop (Left) */}
         <div className="flex flex-col justify-between order-2 md:order-1">
           <div>
             <motion.h3 
-              className="text-lg md:text-2xl font-bold text-white mb-2 transition-colors group-hover:text-orange-400 group-hover:drop-shadow-[0_0_5px_rgba(249,115,22,0.3)]"
+              className="text-lg md:text-2xl font-bold text-white mb-2 transition-colors group-hover:text-orange-400 group-hover:drop-shadow-[0_0_5px_rgba(249,115,22,0.3)] mt-2 md:mt-0"
               variants={{ hover: { scale: 1.02 } }}
             >
               {item.title}
@@ -413,9 +420,10 @@ const AwardCard = ({ item, index, onPreview }) => {
           )}
         </div>
 
+        {/* IMAGE & STATS WRAPPER: Order-1 on Mobile (Top), Order-2 on Desktop (Right) */}
         <div className="order-1 md:order-2 flex flex-col">
-            {/* Added specific height for mobile to prevent collapse, auto for desktop */}
-            <div className="h-48 md:h-auto md:min-h-[14rem] md:flex-grow flex flex-col">
+            {/* Image Container: Auto height on mobile (with min-h constraint), proper flex grow on desktop */}
+            <div className="min-h-[12rem] md:h-auto md:min-h-[14rem] md:flex-grow flex flex-col">
               {item.images && item.images.length > 0 ? (
                   <div className={`grid gap-2 flex-grow w-full h-full ${gridClass}`}>
                      {item.images.map((img, i) => {
@@ -426,7 +434,7 @@ const AwardCard = ({ item, index, onPreview }) => {
                           <div 
                             key={i} 
                             onClick={() => onPreview({ item, initialIndex: i })} 
-                            className={`relative w-full h-full bg-gray-900 rounded border border-gray-800 overflow-hidden shadow-inner cursor-zoom-in group/img ${spanClass}`}
+                            className={`relative w-full h-full bg-gray-900 rounded border border-gray-800 overflow-hidden shadow-inner cursor-zoom-in group/img ${spanClass} min-h-[160px] md:min-h-0`}
                           >
                               <img 
                                   src={getDriveThumbnail(img)} 
@@ -442,18 +450,19 @@ const AwardCard = ({ item, index, onPreview }) => {
                      })}
                   </div>
               ) : (
-                  <div className="relative w-full h-full bg-gray-900/50 rounded border border-dashed border-gray-800 flex flex-col items-center justify-center text-center p-4 group-hover:border-orange-500/30 transition-colors">
+                  <div className="relative w-full h-full bg-gray-900/50 rounded border border-dashed border-gray-800 flex flex-col items-center justify-center text-center p-4 min-h-[12rem] group-hover:border-orange-500/30 transition-colors">
                       <Trophy className="w-8 h-8 text-gray-700 mb-2 group-hover:text-orange-500/50 transition-colors" />
                       <span className="text-[10px] font-mono text-gray-600">No Visual Data</span>
                   </div>
               )}
             </div>
             
+            {/* Stats Grid: Placed below image in this column */}
             <div className="grid grid-cols-2 gap-2 mt-3">
                  {item.stats.map((stat, i) => (
-                    <div key={i} className="bg-gray-900 border border-gray-800 p-1.5 rounded text-center group-hover:border-orange-500/20 transition-colors">
+                    <div key={i} className="bg-gray-900 border border-gray-800 p-2 md:p-1.5 rounded text-center group-hover:border-orange-500/20 transition-colors">
                         <div className="text-[9px] text-gray-500 font-mono uppercase">{stat.label}</div>
-                        <div className="text-xs text-white font-mono group-hover:text-orange-200 transition-colors">{stat.value}</div>
+                        <div className="text-xs md:text-sm text-white font-mono group-hover:text-orange-200 transition-colors font-bold">{stat.value}</div>
                     </div>
                  ))}
             </div>
