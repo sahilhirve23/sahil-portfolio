@@ -48,7 +48,9 @@ export default function Hero({ scrollToSection, addToRefs, handleDownload }) {
       try {
         // Use a CDN that serves ES modules
         const { gsap } = await import("https://esm.sh/gsap@3.12.5");
-        const { ScrollTrigger } = await import("https://esm.sh/gsap@3.12.5/ScrollTrigger");
+        const { ScrollTrigger } = await import(
+          "https://esm.sh/gsap@3.12.5/ScrollTrigger"
+        );
 
         // Register the plugin *after* both are loaded
         gsap.registerPlugin(ScrollTrigger);
@@ -64,19 +66,17 @@ export default function Hero({ scrollToSection, addToRefs, handleDownload }) {
             scrub: true,
           },
         });
-
       } catch (error) {
         console.error("Failed to load GSAP:", error);
       }
     }
 
     loadGsap();
-    
   }, []); // Empty dependency array, so it runs once on mount
 
   // --- 5. Download URL for Resume ---
-  // UPDATED LINK: This is the 'view' link you requested
-  const resumeDownloadUrl = "https://drive.google.com/file/d/10kgYQlEdCPjkh5fZTHdT_HgoLq9Tg2i0/view?usp=sharing";
+  const resumeDownloadUrl =
+    "https://drive.google.com/file/d/10kgYQlEdCPjkh5fZTHdT_HgoLq9Tg2i0/view?usp=sharing";
 
   return (
     <section
@@ -104,35 +104,42 @@ export default function Hero({ scrollToSection, addToRefs, handleDownload }) {
       </div>
 
       {/* LAYER 3: CONTENT (z-20) */}
-      <div className="relative z-20 h-full w-full 
+      {/* Added 'pb-32' on mobile to prevent content overlap with bottom buttons */}
+      <div
+        className="relative z-20 h-full w-full 
                       flex flex-col justify-center items-center md:items-start 
-                      text-center md:text-left px-6 md:pl-20">
+                      text-center md:text-left px-6 md:pl-20 pb-32 md:pb-0"
+      >
         <motion.h1
-  id="hero-title"
-  className="text-5xl sm:text-7xl md:text-8xl font-extrabold text-white relative z-20"
-          
+          id="hero-title"
+          // Slightly adjusted mobile text size for better fit
+          className="text-5xl sm:text-6xl md:text-8xl font-extrabold text-white relative z-20"
           whileHover={{
             color: "transparent", // Makes fill transparent
             WebkitTextStroke: "2px #ff7a00", // Keeps orange stroke
-            scale: 1.05 // Scales up
+            scale: 1.05, // Scales up
           }}
           transition={{ type: "spring", stiffness: 400, damping: 15 }}
         >
           SAHIL HIRVE
         </motion.h1>
 
-        {/* --- FIX 1 & 3: Faded Edges, Responsive Width --- */}
-        <div className="bg-black/60 backdrop-blur-sm rounded-lg p-3 mt-4 
-                        max-w-[90%] md:max-w-[50%] shadow-lg shadow-black/80">
-          <div className="flex flex-row flex-wrap items-center 
-                          text-lg md:text-xl text-gray-300 gap-x-2">
+        {/* --- FIX 1 & 3: Faded Edges, Responsive Width & Layout --- */}
+        <div
+          // Changed mt-4 to mt-6 on mobile for better spacing.
+          // Changed width to w-full sm:w-[90%] for better mobile fitting.
+          className="bg-black/60 backdrop-blur-sm rounded-lg p-4 mt-6 md:mt-4 
+                        w-full sm:w-[90%] md:max-w-[50%] shadow-lg shadow-black/80"
+        >
+          {/* CHANGED LAYOUT: flex-col on mobile, flex-row on desktop */}
+          <div
+            className="flex flex-col md:flex-row md:flex-wrap items-center 
+                          text-lg md:text-xl text-gray-300 gap-y-3 md:gap-x-2 md:gap-y-0"
+          >
             {rolesData.map((role, index) => (
               <Fragment key={role.id}>
-                
-                {/* --- FIX 2: Removed forced line break --- */}
-
                 <motion.span
-                  className="cursor-pointer font-semibold" // Made text bold
+                  className="cursor-pointer font-semibold text-center md:text-left"
                   onMouseEnter={() => setHoveredIndex(role.id)}
                   animate={{
                     scale: hoveredIndex === role.id ? 1.15 : 1,
@@ -146,31 +153,33 @@ export default function Hero({ scrollToSection, addToRefs, handleDownload }) {
                   {role.title}
                 </motion.span>
 
-                {/* --- FIX 2: Simplified separator logic --- */}
+                {/* CHANGED: Separator dots are HIDDEN on mobile (hidden md:inline) */}
                 {index < rolesData.length - 1 && (
-                  <span className="text-gray-500 select-none mx-1">•</span>
+                  <span className="hidden md:inline text-gray-500 select-none mx-1">
+                    •
+                  </span>
                 )}
               </Fragment>
             ))}
           </div>
         </div>
-
       </div>
-{/* --- New: Centered Button Container & Scroll Down Component --- */}
-      <div className="absolute inset-x-0 bottom-10 flex flex-col items-center justify-center z-30">
-        
+      
+      {/* --- New: Centered Button Container & Scroll Down Component --- */}
+      {/* Adjusted bottom positioning: bottom-4 on mobile, bottom-10 on desktop */}
+      <div className="absolute inset-x-0 bottom-4 md:bottom-10 flex flex-col items-center justify-center z-30 px-4">
         {/* 1. New Centered, Styled Buttons */}
-        <div className="flex flex-col md:flex-row gap-4 md:gap-6 mb-6 md:mb-8">
-          <motion.button 
-  className="px-6 py-2 md:px-8 md:py-3 bg-gradient-to-br from-orange-600 to-orange-700 
+        <div className="flex flex-col md:flex-row gap-4 md:gap-6 mb-8 md:mb-8 w-full md:w-auto relative z-40">
+          <motion.button
+            // Added w-full md:w-auto to make buttons full width on small phones
+            className="px-6 py-3 md:px-8 md:py-3 bg-gradient-to-br from-orange-600 to-orange-700 
              rounded-full border border-orange-500 text-base md:text-lg font-semibold 
-             shadow-lg backdrop-blur-sm"
-            // KEY CHANGE: The '_blank' here ensures it opens in a new tab
-            onClick={() => window.open(resumeDownloadUrl, '_blank')}
-            whileHover={{ 
+             shadow-lg backdrop-blur-sm w-full md:w-auto"
+            onClick={() => window.open(resumeDownloadUrl, "_blank")}
+            whileHover={{
               scale: 1.07,
               boxShadow: "0 0 20px rgba(251, 146, 60, 0.7)", // Orange glowing shadow
-              backgroundPosition: "right center" // For subtle gradient shift
+              backgroundPosition: "right center", // For subtle gradient shift
             }}
             whileTap={{ scale: 0.95 }}
             transition={{ type: "spring", stiffness: 400, damping: 17 }}
@@ -178,16 +187,17 @@ export default function Hero({ scrollToSection, addToRefs, handleDownload }) {
           >
             View My Profile
           </motion.button>
-          
-         <motion.button
-  onClick={() => scrollToSection("about")}
-  className="px-6 py-2 md:px-8 md:py-3 bg-gray-800/70 rounded-full border border-gray-700 
-             text-base md:text-lg font-semibold backdrop-blur-sm"
-            whileHover={{ 
+
+          <motion.button
+            onClick={() => scrollToSection("about")}
+            // Added w-full md:w-auto
+            className="px-6 py-3 md:px-8 md:py-3 bg-gray-800/70 rounded-full border border-gray-700 
+             text-base md:text-lg font-semibold backdrop-blur-sm w-full md:w-auto"
+            whileHover={{
               scale: 1.07,
               backgroundColor: "rgba(75, 85, 99, 0.8)", // slightly lighter gray
               borderColor: "rgb(251 146 60)", // Orange border on hover
-              color: "rgb(251 146 60)" // Orange text on hover
+              color: "rgb(251 146 60)", // Orange text on hover
             }}
             whileTap={{ scale: 0.95 }}
             transition={{ type: "spring", stiffness: 400, damping: 17 }}
@@ -198,24 +208,25 @@ export default function Hero({ scrollToSection, addToRefs, handleDownload }) {
 
         {/* 2. New Scroll Down Component */}
         <motion.div
-          className="flex flex-col items-center text-gray-400 cursor-pointer"
+          className="flex flex-col items-center text-gray-400 cursor-pointer relative z-30"
           initial={{ opacity: 0, y: 50 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.5, duration: 0.8 }}
           onClick={() => scrollToSection("education")} // Scroll to the next section
         >
           {/* Shining Text */}
-          <motion.p 
-  className="text-base md:text-lg font-semibold text-gray-400"
+          <motion.p
+            className="text-sm md:text-lg font-semibold text-gray-400"
             style={{
-              backgroundImage: 'linear-gradient(90deg, #555 0%, #AAA 50%, #555 100%)',
-              WebkitBackgroundClip: 'text',
-              WebkitTextFillColor: 'transparent',
-              backgroundSize: '200% auto',
-              backgroundPosition: 'left center',
+              backgroundImage:
+                "linear-gradient(90deg, #555 0%, #AAA 50%, #555 100%)",
+              WebkitBackgroundClip: "text",
+              WebkitTextFillColor: "transparent",
+              backgroundSize: "200% auto",
+              backgroundPosition: "left center",
             }}
             animate={{
-              backgroundPosition: ['left center', 'right center'],
+              backgroundPosition: ["left center", "right center"],
             }}
             transition={{
               duration: 2,
@@ -238,14 +249,14 @@ export default function Hero({ scrollToSection, addToRefs, handleDownload }) {
             }}
           >
             {/* --- THIS IS THE NEW SVG ICON --- */}
-            <svg 
-  className="text-2xl md:text-3xl text-gray-400"
-              stroke="currentColor" 
-              fill="currentColor" 
-              strokeWidth="0" 
-              viewBox="0 0 512 512" 
-              height="1em" 
-              width="1em" 
+            <svg
+              className="text-2xl md:text-3xl text-gray-400 mt-1"
+              stroke="currentColor"
+              fill="currentColor"
+              strokeWidth="0"
+              viewBox="0 0 512 512"
+              height="1em"
+              width="1em"
               xmlns="http://www.w3.org/2000/svg"
             >
               <path d="M233.4 406.6c12.5 12.5 32.8 12.5 45.3 0l192-192c12.5-12.5 12.5-32.8 0-45.3s-32.8-12.5-45.3 0L256 338.7 86.6 169.4c-12.5-12.5-32.8-12.5-45.3 0s-12.5 32.8 0 45.3l192 192z"></path>
@@ -253,9 +264,10 @@ export default function Hero({ scrollToSection, addToRefs, handleDownload }) {
           </motion.div>
         </motion.div>
       </div>
-      
+
       {/* --- Dots and Description Boxes --- */}
-     <div className="absolute z-30 right-4 md:right-20 top-1/2 -translate-y-1/2">
+      {/* CHANGED: Added 'hidden md:block' to hide this entire section on mobile */}
+      <div className="hidden md:block absolute z-30 right-4 md:right-20 top-1/2 -translate-y-1/2">
         <div className="flex flex-col gap-6">
           {rolesData.map((role) => (
             // This 'relative' container holds one dot and its description box
@@ -281,7 +293,7 @@ export default function Hero({ scrollToSection, addToRefs, handleDownload }) {
               <AnimatePresence>
                 {hoveredIndex === role.id && (
                   <motion.div
-  className="absolute right-full top-1/s-1/2 mr-4 md:mr-6 
+                    className="absolute right-full top-1/s-1/2 mr-4 md:mr-6 
              w-56 md:w-64 p-4 bg-black/80 backdrop-blur-lg 
              border border-gray-700 rounded-lg shadow-xl"
                     style={{ transformOrigin: "right center" }}
@@ -293,9 +305,7 @@ export default function Hero({ scrollToSection, addToRefs, handleDownload }) {
                     <p className="text-white text-base font-semibold mb-1">
                       {role.title}
                     </p>
-                    <p className="text-gray-300 text-sm">
-                      {role.description}
-                    </p>
+                    <p className="text-gray-300 text-sm">{role.description}</p>
                   </motion.div>
                 )}
               </AnimatePresence>
