@@ -75,7 +75,8 @@ export default function Hero({ scrollToSection, addToRefs, handleDownload }) {
   }, []); // Empty dependency array, so it runs once on mount
 
   // --- 5. Download URL for Resume ---
-  const resumeDownloadUrl = "https://drive.google.com/uc?export=download&id=1lFH6wPMJVXBsApFUOz_0hnqNvC7tySCA";
+  // UPDATED LINK BELOW
+  const resumeDownloadUrl = "https://drive.google.com/file/d/10kgYQlEdCPjkh5fZTHdT_HgoLq9Tg2i0/view?usp=sharing";
 
   return (
     <section
