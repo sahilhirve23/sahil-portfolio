@@ -75,7 +75,7 @@ export default function Hero({ scrollToSection, addToRefs, handleDownload }) {
   }, []); // Empty dependency array, so it runs once on mount
 
   // --- 5. Download URL for Resume ---
-  // UPDATED LINK BELOW
+  // UPDATED LINK: This is the 'view' link you requested
   const resumeDownloadUrl = "https://drive.google.com/file/d/10kgYQlEdCPjkh5fZTHdT_HgoLq9Tg2i0/view?usp=sharing";
 
   return (
@@ -165,6 +165,7 @@ export default function Hero({ scrollToSection, addToRefs, handleDownload }) {
   className="px-6 py-2 md:px-8 md:py-3 bg-gradient-to-br from-orange-600 to-orange-700 
              rounded-full border border-orange-500 text-base md:text-lg font-semibold 
              shadow-lg backdrop-blur-sm"
+            // KEY CHANGE: The '_blank' here ensures it opens in a new tab
             onClick={() => window.open(resumeDownloadUrl, '_blank')}
             whileHover={{ 
               scale: 1.07,
