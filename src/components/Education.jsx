@@ -166,21 +166,31 @@ const educationData = {
   }
 };
 
+// Updated Experience Data
 const experienceData = {
   internships: {
     id: "EXP_LOG",
-    date: '2022 - Present',
+    // Generic range for the block, specific dates are in sub-items
+    date: '2022 - Present', 
     bg: "https://media.licdn.com/dms/image/v2/D562DAQEwSqm8hAwHIQ/profile-treasury-image-shrink_800_800/B56Zh10wJLG4AY-/0/1754323422266?e=1765015200&v=beta&t=rRYZUYiM-tKYks3Rpw0HzfvWMy3m7dZhHjGBKk6m7nc",
-    aurochs: {
-      company: 'Aurochs Software',
-      title: 'Business Analyst Intern',
-      points: ['Analysis and IC Compensation for Pharma Industries', 'Dashboarding and Data management'],
-      skills: ['SQL', 'Excel', 'Data Analytics', 'Business Analytics']
-    },
     incentius: {
       company: 'Incentius',
       title: 'Business Analyst Intern',
-      points: ['Sales compensation (ICM) analysis.', 'KPI Dashboard maintenance.'],
+      date: 'Nov 2024 – Present',
+      points: [
+        'Analyzed Sales Compensation (IC) data for 2,100+ sales employees, tracking KPIs and payout trends using SQL, Excel, and dashboard visualizations.',
+        'Led requirement gathering, implementation, and UAT across end-to-end project lifecycles, supporting multiple retail business stakeholders.'
+      ],
+      skills: ['SQL', 'Excel', 'Data Analytics', 'Business Analytics']
+    },
+    aurochs: {
+      company: 'Aurochs Software',
+      title: 'Business Analyst Intern',
+      date: 'Aug 2024 – Nov 2024',
+      points: [
+        'Worked on data analysis and IC compensation for U.S. pharmaceutical clients.',
+        'Automated data workflows and dashboards supporting monthly analytics across 5+ Business Units.'
+      ],
       skills: ['SQL', 'Excel', 'Data Analytics', 'Business Analytics']
     },
     aws: {
@@ -236,13 +246,10 @@ export default function Education({ addToRefs }) {
     target: sectionRef,
     offset: ["start end", "end start"],
   });
-  
+   
   // Parallax Logic:
-  // We want the background to scroll to the RIGHT as the user scrolls DOWN.
-  // Mapping scroll progress (0 -> 1) to X axis translation.
-  // Range: Starts at -10% (slightly left) and moves to 10% (slightly right).
-  // The element width is increased to 120% so edges are not visible during movement.
-  const bgX = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
+  // Adjusted for mobile to be less aggressive to prevent overflow issues
+  const bgX = useTransform(scrollYProgress, [0, 1], ["-5%", "5%"]);
 
   return (
     <section
@@ -253,19 +260,19 @@ export default function Education({ addToRefs }) {
       {/* --- BACKGROUND LAYER --- */}
       <div className="absolute inset-0 z-0 pointer-events-none overflow-hidden">
         <motion.div
-          className="absolute top-0 left-0 w-[120%] h-full -ml-[10%]" // Increased width and negative margin to center and allow travel
+          className="absolute top-0 left-0 w-full md:w-[120%] h-full md:-ml-[10%]" 
           style={{
             backgroundImage: `url('${currentBg}')`,
             backgroundSize: "cover",
             backgroundPosition: "center",
-            x: bgX, // Apply horizontal parallax here
-            filter: "brightness(0.8) blur(3px) grayscale(0.5)", // Increased brightness to make bg visible
+            x: bgX, 
+            filter: "brightness(0.7) blur(3px) grayscale(0.5)", // Darkened slightly more for mobile readability
             transition: "background-image 0.7s ease-in-out"
           }}
         />
 
-        {/* Reduced overlay opacity to make bg visible */}
-        <div className="absolute inset-0 bg-gradient-to-b from-gray-900 via-black/30 to-gray-900" />
+        {/* Increased overlay opacity to make text readable on phone */}
+        <div className="absolute inset-0 bg-gradient-to-b from-gray-900/90 via-black/50 to-gray-900/90" />
         
         {/* Tech Grid Overlay */}
         <div className="absolute inset-0 bg-[linear-gradient(rgba(30,30,30,0.5)_1px,transparent_1px),linear-gradient(90deg,rgba(30,30,30,0.5)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_60%_60%_at_50%_50%,#000_70%,transparent_100%)] opacity-20" />
@@ -301,12 +308,12 @@ export default function Education({ addToRefs }) {
             whileHover="hover"
             viewport={{ once: true }}
             variants={statusBarGlowVariant}
-            className="flex items-center gap-4 text-[10px] font-mono text-gray-500 bg-gray-900/50 px-4 py-2 rounded-full border border-gray-800/50 backdrop-blur-sm cursor-crosshair"
+            className="flex flex-wrap justify-center items-center gap-2 sm:gap-4 text-[10px] font-mono text-gray-500 bg-gray-900/50 px-4 py-2 rounded-full border border-gray-800/50 backdrop-blur-sm cursor-crosshair"
           >
              <span className="flex items-center gap-1"><div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"/> LIVE_DATA_FEED</span>
-             <span>|</span>
+             <span className="hidden sm:inline">|</span>
              <span>TOTAL_NODES: 4</span>
-             <span>|</span>
+             <span className="hidden sm:inline">|</span>
              <span>SYNCED: JUST_NOW</span>
            </motion.div>
         </div>
@@ -320,7 +327,7 @@ export default function Education({ addToRefs }) {
             whileInView="visible"
             viewport={{ once: true, amount: 0.2 }}
             variants={staggerContainer}
-            className="bg-gray-900/20 backdrop-blur-md border border-gray-800 rounded-xl p-6 md:p-8 transition-all duration-300 group"
+            className="bg-gray-900/20 backdrop-blur-md border border-gray-800 rounded-xl p-4 md:p-8 transition-all duration-300 group"
           >
             <SectionHeader icon={GraduationCap} title="Education" id="NODE_EDU" />
 
@@ -335,10 +342,10 @@ export default function Education({ addToRefs }) {
               <div className="absolute -left-[5px] top-0 w-2.5 h-2.5 rounded-full bg-orange-500 shadow-[0_0_10px_#f97316]" />
               
               <div className="flex flex-col gap-1 mb-2">
-                <h4 className="text-2xl font-bold text-white group-hover/item:text-orange-100 transition-colors">
+                <h4 className="text-xl md:text-2xl font-bold text-white group-hover/item:text-orange-100 transition-colors">
                   {educationData.btech.title}
                 </h4>
-                <div className="flex flex-wrap items-center gap-3 text-sm">
+                <div className="flex flex-wrap items-center gap-2 md:gap-3 text-sm">
                   <span className="text-orange-400 font-mono">@ {educationData.btech.subtitle}</span>
                   <span className="text-gray-500 font-mono text-xs border border-gray-800 px-2 py-0.5 rounded bg-black/30">
                     {educationData.btech.date}
@@ -404,7 +411,7 @@ export default function Education({ addToRefs }) {
             whileInView="visible"
             viewport={{ once: true, amount: 0.2 }}
             variants={staggerContainer}
-            className="bg-gray-900/20 backdrop-blur-md border border-gray-800 rounded-xl p-6 md:p-8 transition-all duration-300 group"
+            className="bg-gray-900/20 backdrop-blur-md border border-gray-800 rounded-xl p-4 md:p-8 transition-all duration-300 group"
           >
             <SectionHeader icon={Briefcase} title="Experience" id="NODE_EXP" />
 
@@ -422,7 +429,7 @@ export default function Education({ addToRefs }) {
                  <div>
                     <h4 className="text-xl font-bold text-white">Internships</h4>
                  </div>
-                 <span className="text-xs text-gray-500 font-mono bg-black/30 px-2 py-1 rounded border border-gray-800">
+                 <span className="text-xs text-gray-500 font-mono bg-black/30 px-2 py-1 rounded border border-gray-800 hidden sm:inline-block">
                    {experienceData.internships.date}
                  </span>
                </div>
@@ -430,45 +437,25 @@ export default function Education({ addToRefs }) {
                {/* Container for All Internships */}
                <motion.div className="flex flex-col gap-4 bg-black/20 rounded-lg p-1 border border-gray-800/50" variants={staggerContainer}>
                   
-                  {/* Top Row: Aurochs & Incentius */}
-                  <div className="grid md:grid-cols-2 gap-4">
-                      {/* Job A: Aurochs */}
+                  {/* Top Row: Aurochs & Incentius (Stack on mobile, Side-by-side on desktop) */}
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                      
+                      {/* Job A: Incentius */}
                       <motion.div 
                         className="p-3 bg-gray-900/40 rounded border border-gray-800/50 transition-colors flex flex-col h-full"
                         variants={subCardVariantsBlue}
                         whileHover="hover"
                       >
-                        <div className="flex items-center gap-2 mb-2">
-                            <Activity size={14} className="text-blue-400" />
-                            <span className="text-sm font-bold text-gray-200">{experienceData.internships.aurochs.company}</span>
+                        <div className="flex justify-between items-start mb-2">
+                            <div className="flex items-center gap-2">
+                                <Layers size={14} className="text-purple-400 shrink-0" />
+                                <span className="text-sm font-bold text-gray-200">{experienceData.internships.incentius.company}</span>
+                            </div>
                         </div>
-                        <div className="text-[10px] text-gray-500 uppercase font-mono mb-2">{experienceData.internships.aurochs.title}</div>
-                        <motion.ul className="space-y-1 mb-3 flex-grow" variants={staggerContainer}>
-                            {experienceData.internships.aurochs.points.map((p, i) => (
-                              <motion.li key={i} className="text-[11px] text-gray-400 leading-tight" variants={itemVariant}>- {p}</motion.li>
-                            ))}
-                        </motion.ul>
-                        <motion.div className="flex flex-wrap gap-1 mt-auto" variants={staggerContainer}>
-                            {experienceData.internships.aurochs.skills.map((s,i) => (
-                              <motion.div key={i} variants={itemVariant}>
-                                <span className="text-[9px] text-blue-300 bg-blue-900/20 px-1.5 py-0.5 rounded">{s}</span>
-                              </motion.div>
-                            ))}
-                        </motion.div>
-                      </motion.div>
-
-                      {/* Job B: Incentius */}
-                      <motion.div 
-                        className="p-3 bg-gray-900/40 rounded border border-gray-800/50 transition-colors flex flex-col h-full"
-                        variants={subCardVariantsBlue}
-                        whileHover="hover"
-                      >
-                        <div className="flex items-center gap-2 mb-2">
-                            <Layers size={14} className="text-purple-400" />
-                            <span className="text-sm font-bold text-gray-200">{experienceData.internships.incentius.company}</span>
-                        </div>
+                        <div className="text-[10px] text-gray-400 font-mono mb-1">{experienceData.internships.incentius.date}</div>
                         <div className="text-[10px] text-gray-500 uppercase font-mono mb-2">{experienceData.internships.incentius.title}</div>
-                        <motion.ul className="space-y-1 mb-3 flex-grow" variants={staggerContainer}>
+                        
+                        <motion.ul className="space-y-2 mb-3 flex-grow" variants={staggerContainer}>
                             {experienceData.internships.incentius.points.map((p, i) => (
                               <motion.li key={i} className="text-[11px] text-gray-400 leading-tight" variants={itemVariant}>- {p}</motion.li>
                             ))}
@@ -477,6 +464,35 @@ export default function Education({ addToRefs }) {
                             {experienceData.internships.incentius.skills.map((s,i) => (
                               <motion.div key={i} variants={itemVariant}>
                                 <span className="text-[9px] text-purple-300 bg-purple-900/20 px-1.5 py-0.5 rounded">{s}</span>
+                              </motion.div>
+                            ))}
+                        </motion.div>
+                      </motion.div>
+                      
+                      {/* Job B: Aurochs */}
+                      <motion.div 
+                        className="p-3 bg-gray-900/40 rounded border border-gray-800/50 transition-colors flex flex-col h-full"
+                        variants={subCardVariantsBlue}
+                        whileHover="hover"
+                      >
+                        <div className="flex justify-between items-start mb-2">
+                             <div className="flex items-center gap-2">
+                                <Activity size={14} className="text-blue-400 shrink-0" />
+                                <span className="text-sm font-bold text-gray-200">{experienceData.internships.aurochs.company}</span>
+                            </div>
+                        </div>
+                        <div className="text-[10px] text-gray-400 font-mono mb-1">{experienceData.internships.aurochs.date}</div>
+                        <div className="text-[10px] text-gray-500 uppercase font-mono mb-2">{experienceData.internships.aurochs.title}</div>
+                        
+                        <motion.ul className="space-y-2 mb-3 flex-grow" variants={staggerContainer}>
+                            {experienceData.internships.aurochs.points.map((p, i) => (
+                              <motion.li key={i} className="text-[11px] text-gray-400 leading-tight" variants={itemVariant}>- {p}</motion.li>
+                            ))}
+                        </motion.ul>
+                        <motion.div className="flex flex-wrap gap-1 mt-auto" variants={staggerContainer}>
+                            {experienceData.internships.aurochs.skills.map((s,i) => (
+                              <motion.div key={i} variants={itemVariant}>
+                                <span className="text-[9px] text-blue-300 bg-blue-900/20 px-1.5 py-0.5 rounded">{s}</span>
                               </motion.div>
                             ))}
                         </motion.div>
@@ -491,14 +507,14 @@ export default function Education({ addToRefs }) {
                   >
                       <div className="flex justify-between items-start mb-2">
                          <div className="flex items-center gap-2">
-                            <Cloud size={14} className="text-yellow-500" />
+                            <Cloud size={14} className="text-yellow-500 shrink-0" />
                             <span className="text-sm font-bold text-gray-200">{experienceData.internships.aws.company}</span>
                          </div>
                          <span className="text-[9px] font-mono text-gray-500">{experienceData.internships.aws.date}</span>
                       </div>
                       <div className="text-[10px] text-gray-500 uppercase font-mono mb-2">{experienceData.internships.aws.title}</div>
                       <p className="text-[11px] text-gray-400 leading-tight mb-3">
-                         - {experienceData.internships.aws.points[0]}
+                          - {experienceData.internships.aws.points[0]}
                       </p>
                       <motion.div className="flex flex-wrap gap-1" variants={staggerContainer}>
                          {experienceData.internships.aws.skills.map((s,i) => (
