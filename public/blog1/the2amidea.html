@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The 2 AM Idea That Changed How I Work With AI - Sahil</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Tailwind Typography Plugin for elegant blog formatting -->
+    <script src="https://cdn.tailwindcss.com?plugins=typography"></script>
+    <style>
+        /* Fixed space background */
+        body {
+            background-image: url('https://img.magnific.com/free-vector/infinite-space-background_1217-1211.jpg?semt=ais_hybrid&w=740&q=80');
+            background-attachment: fixed;
+            background-size: cover;
+            background-position: center;
+        }
+        /* Glassmorphism container mimicking your portfolio's blue theme */
+        .glass-container {
+            background-color: rgba(10, 25, 47, 0.85); /* Deep translucent portfolio blue */
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+<body class="antialiased min-h-screen py-12 px-4 sm:px-6 lg:px-8 text-gray-200">
+
+    <main class="max-w-4xl mx-auto glass-container rounded-3xl p-8 sm:p-14 overflow-hidden relative">
+        
+        <!-- Back Navigation -->
+        <a href="/sahil-portfolio/" class="inline-flex items-center text-blue-400 hover:text-blue-300 transition-colors mb-10 font-semibold no-underline">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
+            Back to Portfolio
+        </a>
+
+        <!-- Blog Content -->
+        <article class="prose prose-invert prose-lg md:prose-xl max-w-none prose-headings:text-white prose-a:text-blue-400 prose-img:rounded-xl prose-img:shadow-lg">
+            
+            <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight mb-8">The 2 AM Idea That Changed How I Work With AI</h1>
+
+            <p>It was around 2 in the morning and I was irritated about something small.</p>
+            
+            <p>That day I'd spent the first twenty minutes explaining a project to an AI. Again. Same project I'd explained on Monday. Same background, same decisions, same list of things we'd already tried and thrown out. And I knew I'd be doing it again on Thursday.</p>
+            
+            <p>That's the part nobody warns you about. The model is brilliant. It just has no idea who you are. Every morning you walk in and introduce yourself to a stranger.</p>
+            
+            <p>So I wrote the idea down before I lost it, built it the next day, and fully expected it to be one of those 2 am things that looks silly in daylight.</p>
+            
+            <p>It wasn't. I've worked this way ever since and I can't imagine going back to the other thing.</p>
+            
+            <h3 class="text-2xl font-bold mt-10">It was never a memory problem. It was a filing problem.</h3>
+            
+            <img src="https://png.pngtree.com/thumb_back/fw800/background/20251209/pngtree-organized-desk-drawer-filled-with-office-supplies-neatly-arranged-in-clear-image_20782460.webp" alt="Organized desk drawer" class="w-full h-auto mt-6 mb-10 object-cover" />
+
+            <p>Everyone's answer to "AI forgets things" is to give it a bigger memory. More context, more words it can hold at once. A hundred thousand, then a million.</p>
+            
+            <p>I think that's solving the wrong half.</p>
+            
+            <p>Think about your own desk. You don't keep everything you've ever worked on stacked on it. You'd never find anything. You keep today's job on the desk and the rest in a cabinet, and the only skill that matters is knowing which drawer to open.</p>
+            
+            <p>Nobody fixes a cluttered desk by buying a bigger desk.</p>
+            
+            <p>Today's job goes on the desk. Everything else stays in the cabinet until you need it.</p>
+            
+            <p>So I stopped trying to carry my history into every conversation. I wrote it all down properly instead, and taught the AI how to go and find the one bit it needs.</p>
+
+            <h3 class="text-2xl font-bold mt-10">What I actually built</h3>
+            
+            <p>A single text file. That's genuinely it.</p>
+            
+            <p>Every time I finish a working session with the AI, it writes a short section at the top of that file. What we worked on, what we decided, what got built, what's still unfinished. It's up to 41 of those now, about 5,000 lines.</p>
+            
+            <p>The one rule I never break is that nothing in it ever gets edited or deleted. Only added. The moment you start tidying up old entries, the file stops being a record of what happened and becomes your later opinion of what happened. Those aren't the same thing, and you find out they aren't the same thing three months later, when somebody asks why a limit got set at one number and not another, and you need the actual session where it was decided, with the date sitting on it.</p>
+            
+            <p>One thing worth mentioning, because it's why any of this is possible: I don't use AI in a browser tab. I use Claude Code, which runs in my terminal and sits inside my actual working folder, so it can open and search files on my machine.</p>
+
+            <img src="https://miro.medium.com/v2/1*-H4SOcQpprFTgESw3CKcpQ.png" alt="Terminal integration concept" class="w-full h-auto mt-6 mb-10 object-cover" />
+
+            <p>A chat window can only know what's in the chat. Something running on your laptop can open a file, skip to line 135 and read fifty lines. That difference is the whole reason my memory can live on disk instead of in the conversation.</p>
+
+            <h3 class="text-2xl font-bold mt-10">The tags line, which is the actual trick</h3>
+
+            <img src="https://blog-api.landr.com/wp-content/uploads/2023/04/tags-asset-1920x1074.jpg" alt="Tags concept" class="w-full h-auto mt-6 mb-10 object-cover" />
+            
+            <p><em>This section and the next two get technical. Skip to "What it feels like now" if that's not your thing, you won't miss the point.</em></p>
+            
+            <p>Every section in that file starts with a single line of tags. It looks like this:</p>
+            
+            <pre class="bg-gray-900 p-4 rounded-lg text-sm overflow-x-auto text-blue-300 border border-gray-700"><code>tags: session:S041 date:2026-09-18 client:abc area:build topic:change-request,impact-assessment status:active period:2026-09 key:rate-is-config-not-code,old-report-double-counts,region-split-still-open</code></pre>
+            
+            <p>One line per session. This is the whole index.</p>
+            
+            <p>That line is the entire system. Everything else is just text underneath it.</p>
+            
+            <p>It's an index, hand-written, one line per session. Same idea as the index at the back of a book, except I add to it as I go instead of at the end.</p>
+            
+            <p>Each tag is an axis I can filter on. Project, area of work, topic, whether it's still open, which month, and so on. But the ones that earn their keep are the <code>key:</code> tags at the end. Those aren't labels. <code>old-report-double-counts</code> is the conclusion of a two-hour investigation, compressed into something that still makes sense when you read it cold, six months later, with no surrounding paragraph.</p>
+            
+            <p>So I can look at one line and know what happened in a two-hour session without opening it. More to the point, so can the AI.</p>
+            
+            <p>It costs about thirty seconds to write at the end of a session. Which is the trade the whole thing rests on: you pay a tiny amount every time you write, so that every single time you read afterwards is almost free. And I read far more often than I write.</p>
+
+            <h3 class="text-2xl font-bold mt-10">How it gets loaded</h3>
+            
+            <p>Two commands. That's the depth of the magic.</p>
+            
+            <p>First it builds a map, pulling out only the headings and the tags lines, with their line numbers:</p>
+            
+            <pre class="bg-gray-900 p-4 rounded-lg text-sm overflow-x-auto text-green-400 border border-gray-700"><code>grep -nE "^## Session|^tags:" CLAUDE_CACHE.md</code></pre>
+            
+            <p>That's about 80 lines out of 5,000. The complete index of everything I've ever done, for almost nothing.</p>
+            
+            <p>Then it reads whatever I've just typed, works out which project and topic I'm on, matches it against those tags, and jumps straight to the sections that matched:</p>
+            
+            <pre class="bg-gray-900 p-4 rounded-lg text-sm overflow-x-auto text-green-400 border border-gray-700"><code>sed -n '135,197p' CLAUDE_CACHE.md</code></pre>
+            
+            <p>Find, then fetch. Claude Code runs both itself, I never type them.</p>
+
+            <!-- Token Math Visualization (Kept as requested via styled CSS box) -->
+            <div class="my-10 bg-gray-900/80 border border-blue-500/30 rounded-xl p-6 shadow-lg flex flex-col md:flex-row items-center justify-between text-center gap-4">
+                <div class="flex-1">
+                    <p class="text-gray-400 text-sm uppercase tracking-wider mb-1">The Whole File</p>
+                    <p class="text-2xl font-bold text-white">5,000 lines</p>
+                    <p class="text-sm text-gray-500">~130,000 tokens</p>
+                    <p class="text-xs text-red-400 mt-2">Never Loaded</p>
+                </div>
+                <div class="text-blue-500 text-3xl hidden md:block">&rarr;</div>
+                <div class="flex-1 border-y md:border-y-0 md:border-x border-gray-700 py-4 md:py-0 md:px-4">
+                    <p class="text-blue-400 text-sm uppercase tracking-wider mb-1">Grep The Index</p>
+                    <p class="text-2xl font-bold text-white">80 lines</p>
+                    <p class="text-sm text-gray-500">~5,000 tokens</p>
+                    <p class="text-xs text-blue-300 mt-2">Headings + Tags Only</p>
+                </div>
+                <div class="text-blue-500 text-3xl hidden md:block">&rarr;</div>
+                <div class="flex-1">
+                    <p class="text-orange-400 text-sm uppercase tracking-wider mb-1">Seek The Match</p>
+                    <p class="text-2xl font-bold text-white">1 session</p>
+                    <p class="text-sm text-gray-500">~3,000 tokens</p>
+                    <p class="text-xs text-orange-300 mt-2">The Part That Matters</p>
+                </div>
+            </div>
+            <p class="text-center text-sm text-blue-300 font-semibold mb-10">Under 10,000 tokens to full working context, instead of 130,000</p>
+
+            <p>The numbers, since this is the part people argue with. Pasting that whole file into a conversation would be roughly 130,000 tokens, and tokens are the thing you pay for. The index scan costs about 5,000. The session it actually pulls costs another 3,000 or so. So I'm landing at full working context on a project I last touched in June for under 10,000 tokens instead of 130,000, and I'm doing that every session, forever.</p>
+
+            <h3 class="text-2xl font-bold mt-10">"Why not just let AI search the file?"</h3>
+            
+            <p>The obvious technical objection, and I did consider it. Chop the file into chunks, convert them to embeddings (the standard way of letting software find text by meaning rather than exact words), store them, retrieve by similarity. Textbook.</p>
+            
+            <p>I didn't, for three reasons.</p>
+            
+            <ul class="space-y-4">
+                <li>I already know what I'm looking for. I'm not fishing around in vague prose, I'm asking for one project, one topic, still open. That's an exact filter, not a resemblance. And searching by meaning will happily hand me the other project's section, because two similar projects describe near-identical problems in near-identical language.</li>
+                <li>It either matches or it doesn't. No similarity threshold to tune, no chunk boundary slicing a decision in half, no quiet miss I never learn about. I can read my own index with my own eyes and check it's right. You can't eyeball a pile of vectors.</li>
+                <li>And there's nothing to keep in sync. No extra model, no database, no pipeline. The index lives in the same file as the thing it indexes, so it physically can't drift out of date.</li>
+            </ul>
+            
+            <p>Semantic search is the right tool when you don't know what the questions will look like and the pile's too big to list. Neither is true here. Forty-one sessions isn't a search problem, it's a filing problem, and people keep reaching for a search engine when what they needed was a cabinet with labelled drawers.</p>
+
+            <h3 class="text-2xl font-bold mt-10">What it feels like now</h3>
+            
+            <p>Here's the bit I undersold for months, because I was busy being smug about the token usage.</p>
+            
+            <p>The saving isn't the point. The point is that I've stopped explaining things.</p>
+            
+            <p>I can open a session and type "why did we rule that out?" and get a real answer. Not a guess. The actual reason, from the actual session, with the date. To a blank AI that question is meaningless. To one that's just read the right eight paragraphs it's completely clear.</p>
+            
+            <p>My prompts have got lazier and the answers have got better at the same time, which isn't how I expected that to go. I'd put it around 98 percent right, and when it misses it's almost always a session I couldn't be bothered to log properly.</p>
+            
+            <p>There's a second half to this that took me longer to work out, though.</p>
+            
+            <p><strong>It's not enough to load the right context. You have to load only the right context.</strong></p>
+            
+            <p>If I dumped all 41 sessions in, the answer would be in there somewhere, sitting next to four other projects' versions of nearly the same problem. And what comes back then is fluent, confident and quietly wrong. You won't spot it by reading the reply, because a wrong answer looks exactly like a right one.</p>
+            
+            <p>So when I switch projects, the old one's sections get dropped. On purpose. Not left to fade out.</p>
+            
+            <p>Which is why a bigger memory actively makes this worse. Precision is what lets a lazy prompt work. Volume is what breaks it.</p>
+
+            <h3 class="text-2xl font-bold mt-10">Housekeeping</h3>
+            
+            <p>Every session is marked active, paused, closed or superseded. So when I start up, the first thing I get is a list of everything still open — fifteen threads right now, each with its date and project.</p>
+
+            <img src="https://images.rawpixel.com/image_800/czNmcy1wcml2YXRlL3Jhd3BpeGVsX2ltYWdlcy93ZWJzaXRlX2NvbnRlbnQvbHIvcHg4NTg0OTktaW1hZ2Uta3d2dXVzaTkuanBn.jpg" alt="Open tasks representation" class="w-full h-auto mt-6 mb-10 object-cover" />
+
+            <p>I pick one, and only that one loads. Nothing gets quietly abandoned.</p>
+            
+            <p>And the file doesn't grow forever. It's backed up into separate folders as I go, which costs nothing because it's a text file. Every eight to ten sessions the history gets rolled into a new version and archived, and the live file starts fresh. So instead of one file swelling without limit I've got a series of them, each closed and parked and still searchable when I need it.</p>
+
+            <h3 class="text-2xl font-bold mt-10">It's a text file, so it goes anywhere</h3>
+            
+            <p>No app, no subscription, no database, nobody's built-in memory feature. A text file and a naming convention.</p>
+            
+            <p>Which means I can hand it to a colleague and they get my reasoning, not just my output. I can filter it down to one project and share only that slice. I can move it to another machine, another account, or a completely different AI, and my memory comes with me. When something better ships next year I'll switch, and lose nothing.</p>
+
+            <h3 class="text-2xl font-bold mt-10">One thing at a time</h3>
+            
+            <p>Everyone's excited about firing off five AI agents at once. It looks fast.</p>
+            
+            <p>In practice I run almost everything one task at a time. Partly because five agents burn tokens five times quicker, each loading its own context. But mostly because if all five are working on questions that hang off a decision nobody's made yet, you don't get five answers. You get five slightly different guesses, and a tidying-up job you never planned for.</p>
+            
+            <p>Settle the shared decisions first. Then take the pieces in order.</p>
+
+            <h3 class="text-2xl font-bold mt-10">If you want to steal it</h3>
+            
+            <p>You need five things, and none of them need any tooling.</p>
+            
+            <ul class="space-y-2">
+                <li>A file that's only ever added to.</li>
+                <li>A section per session, with a date and a real title.</li>
+                <li>A tags line carrying the handful of things you actually search by, and yours won't look like mine.</li>
+                <li>Decisions and loose ends written down, not just outcomes.</li>
+                <li>And the habit of reading the index before you read anything else.</li>
+            </ul>
+            
+            <p>Right context, permanent history, almost no tokens. You only get all three at once if you write the index as you go.</p>
+            
+            <p>Most people treat an AI's memory as somewhere to put things. It isn't. It's a desk, it's the most expensive space you own, and the file on your disk is the filing cabinet.</p>
+            
+            <p>Not bad for something I scribbled down at 2 am expecting nothing.</p>
+
+        </article>
+    </main>
+</body>
+</html>
