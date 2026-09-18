@@ -29,8 +29,8 @@ export default function App() {
     }
 
     if (!isLoading) {
-window.scrollTo(0, 0);
-if (lenisRef.current) lenisRef.current.scrollTo(0, { immediate: true });
+      window.scrollTo(0, 0);
+      if (lenisRef.current) lenisRef.current.scrollTo(0, { immediate: true });
       
       lenisRef.current = new Lenis({ duration: 1.2, smooth: true });
 
@@ -122,8 +122,16 @@ if (lenisRef.current) lenisRef.current.scrollTo(0, { immediate: true });
         <Contact addToRefs={addToRefs} />
 
         <footer className="text-center py-6 bg-black text-gray-500 border-t border-gray-800">
-          © 2025 Sahil Hirve | All Rights Reserved
+          © {new Date().getFullYear()} Sahil Hirve | All Rights Reserved
         </footer>
+
+        {/* Floating Blog Button */}
+        <a 
+          href="/sahil-portfolio/blog1/the2amidea.html"
+          className="fixed bottom-5 right-5 bg-blue-500 text-white rounded-full w-[65px] h-[65px] flex items-center justify-center text-center font-bold shadow-lg z-[1000] text-sm leading-tight hover:scale-105 transition-transform duration-200"
+        >
+          New<br/>Blog
+        </a>
       </motion.div>
     </div>
   );
